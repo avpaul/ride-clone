@@ -1,9 +1,10 @@
 # Ride My Way
 <i>Stalk cars on your way in real-time</i>
+
 This application serves as a ride assistant to help users get track of shared transportation.
 
 ## Installation
-- Clone and run ```yarn``
+- Clone and run ```yarn install```
 - Install XCode or Android Studio
 - Run ```yarn start``` and ```yarn ios``` to start the emulator.
 
