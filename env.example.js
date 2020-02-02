@@ -1,4 +1,8 @@
 export const FirebaseConfig = {
-  staging: {},
-  production: {},
+  staging: {
+    //Staging configuration
+  },
+  production: {
+    //Production configuration
+  },
 };
