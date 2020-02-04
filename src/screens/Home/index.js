@@ -1,11 +1,11 @@
-import React from 'react';
-import {View} from 'react-native';
-import SampleTemplate from '../../components/templates/Sample';
+import React from "react";
+import { View } from "react-native";
+import MapView from "../../components/atoms/MapView";
 
 const Home = () => {
   return (
     <View>
-      <SampleTemplate />
+      <MapView />
     </View>
   );
 };
