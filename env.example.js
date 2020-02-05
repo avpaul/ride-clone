@@ -6,3 +6,5 @@ export const FirebaseConfig = {
     //Production configuration
   },
 };
+
+export const GOOGLE_DIRECTION_API_KEY = 'API_KEY';

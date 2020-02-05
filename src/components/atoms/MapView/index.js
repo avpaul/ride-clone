@@ -7,7 +7,15 @@ import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
 import { KIGALI_COORDINATES } from "../../../constants/coordinates";
 import LocationService from "../../../services/location-service";
 
-function MapViewWrapper({ style, initialRegion, mapRef, markers, ...props }) {
+function MapViewWrapper({
+  style,
+  initialRegion,
+  mapRef,
+  markers,
+  routes,
+  children,
+  ...props
+}) {
   const mapView = useRef();
 
   const mapReady = () => {
@@ -30,8 +38,14 @@ function MapViewWrapper({ style, initialRegion, mapRef, markers, ...props }) {
       {...props}
     >
       {markers.map((marker, index) => (
-        <View key={index}>{marker}</View>
+        <React.Fragment key={index}>{marker}</React.Fragment>
       ))}
+
+      {routes.map((route, index) => (
+        <React.Fragment key={index}>{route}</React.Fragment>
+      ))}
+
+      {children}
     </MapView>
   );
 }
@@ -39,13 +53,15 @@ function MapViewWrapper({ style, initialRegion, mapRef, markers, ...props }) {
 MapViewWrapper.defaultProps = {
   mapRef: () => null,
   initialRegion: KIGALI_COORDINATES,
-  markers: []
+  markers: [],
+  routes: []
 };
 
 MapViewWrapper.propTypes = {
   mapRef: PropTypes.func,
   initialRegion: PropTypes.instanceOf(Object),
-  markers: PropTypes.instanceOf(Array)
+  markers: PropTypes.instanceOf(Array),
+  routes: PropTypes.instanceOf(Array)
 };
 
 const _style = StyleSheet.create({
