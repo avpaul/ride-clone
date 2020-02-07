@@ -1,11 +1,13 @@
-import React from 'react';
-import {View} from 'react-native';
-import SampleTemplate from '../../components/templates/Sample';
+import React from "react";
+import { View } from "react-native";
+import MapView from "../../atoms/MapView";
+import HomeTemplate from "../../templates/Home";
+import SearchBar from "../../molecules/Sample/SearchBar";
 
 const Home = () => {
   return (
     <View>
-      <SampleTemplate />
+      <HomeTemplate mapView={<MapView />} toolbar={<SearchBar />} />
     </View>
   );
 };
