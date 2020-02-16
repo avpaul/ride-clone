@@ -6,6 +6,8 @@ import GOOGLE_MAP_SILVER_STYLE from "../../../styles/googleMapSilver";
 import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
 import { KIGALI_COORDINATES } from "../../../constants/coordinates";
 import LocationService from "../../../services/location-service";
+import { useDispatch } from "react-redux";
+import { setCurrentLocation } from "../../../redux/actions/location";
 
 function MapViewWrapper({
   style,
@@ -17,8 +19,12 @@ function MapViewWrapper({
   ...props
 }) {
   const mapView = useRef();
+  const dispatch = useDispatch();
 
-  const mapReady = () => {
+  const mapReady = async () => {
+    const { location } = await LocationService.getCurrentLocation();
+    setCurrentLocation(location)(dispatch);
+    
     LocationService.moveTocurrentLocation(mapView);
   };
 
