@@ -9,7 +9,7 @@ const HomeTemplate = ({ toolbar, bottomNavigation, mapView }) => {
     <SafeAreaView style={style.container} forceInset={{ bottom: 'never'}}>
       <View style={style.mapView}>{mapView}</View>
       <View style={style.toolbar}>{toolbar}</View>
-      <View>{bottomNavigation}</View>
+      <View style={style.bottomNavigation}>{bottomNavigation}</View>
     </SafeAreaView>
   );
 };
@@ -29,8 +29,7 @@ const style = StyleSheet.create({
     position: "absolute",
   },
   bottomNavigation: {
-    padding: 20,
-    paddingBottom: 40
+
   }
 });
 

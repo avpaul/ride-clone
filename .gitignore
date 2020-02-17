@@ -12,6 +12,8 @@ web-report/
 
 # macOS
 .DS_Store
+.idea
+.vscode
 
 # env variables
 env.js
