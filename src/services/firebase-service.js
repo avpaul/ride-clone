@@ -57,6 +57,23 @@ class FirebaseService {
     }
   }
 
+  async getDocument(collection, document) {
+    try {
+      snapshot = await this.database
+        .collection(collection)
+        .doc(document)
+        .get();
+
+      if(snapshot.exists){
+        return Promise.resolve(snapshot.data());
+      }
+
+      return Promise.resolve(null);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
   async getCollection(collection, { field, sign, value } = {}, page = 1000) {
     let snapshot;
 
@@ -68,7 +85,7 @@ class FirebaseService {
           .limit(page)
           .get();
       } else {
-        snapshot = await db
+        snapshot = await this.database
           .collection(collection)
           .limit(page)
           .get();

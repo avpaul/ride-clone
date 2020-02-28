@@ -7,5 +7,8 @@ export default {
   search: {
     origin: null,
     destination: null
+  },
+  guide: {
+    destinationRoute: {}
   }
 };

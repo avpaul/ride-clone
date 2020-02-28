@@ -1,24 +1,50 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import BusStopIcon from "../../../assets/icons/bus-stop";
 import { lightDark } from "../../../styles/colors";
-import { DESTINATION } from '../../../constants/searchBar';
+import { DESTINATION, ORIGIN } from "../../../constants/searchBar";
 import { setSearchSelection } from "../../../redux/actions/search";
-import LocationService from "../../../services/location-service";
+import { box_shadow } from "../../../styles";
+import GuideService from "../../../services/guide-service";
+import { setDestinationRoute } from "../../../redux/actions/guide";
 
-const PlacePredictions = ({ style, predictions, type, toggleSearchBar, mapView, onSelection }) => {
-  const  dispatch = useDispatch();
+const PlacePredictions = ({
+  style,
+  predictions,
+  type,
+  toggleSearchBar,
+  mapView,
+  onSelection
+}) => {
+  const dispatch = useDispatch();
+  const guideService = new GuideService();
 
-  const handleSelection = () => {
+  const { currentLocation: { coords: currentLocation } = {} } = useSelector(({ location }) => location);
+
+  const handleSelection = index => {
     onSelection();
     toggleSearchBar();
-    
-    setSearchSelection({[type]:predictions[0].description})(dispatch);
-    LocationService.moveTocurrentLocation(mapView);
-  }
+
+    const address = predictions[index].description;
+
+    setSearchSelection({ [type]: address })(dispatch);
+
+    handleDestination(address);
+  };
+
+  const handleDestination = async destinationAddress => {
+    if (type === DESTINATION) {
+      const destinationRoute = await guideService.getRouteWithDestinationNearbyPoint(
+        destinationAddress,
+        currentLocation
+      );
+
+      setDestinationRoute(destinationRoute)(dispatch);
+    }
+  };
 
   return (
     <ScrollView
@@ -27,7 +53,11 @@ const PlacePredictions = ({ style, predictions, type, toggleSearchBar, mapView, 
       style={style}
     >
       {predictions.map(({ description }, index) => (
-        <TouchableOpacity underlayColor={lightDark} key={index} onPress={handleSelection}>
+        <TouchableOpacity
+          underlayColor={lightDark}
+          key={index}
+          onPress={() => handleSelection(index)}
+        >
           <View style={_style.suggestion_container}>
             <Text style={_style.text}>{description}</Text>
             <BusStopIcon width={20} height={20} />
@@ -49,19 +79,12 @@ const _style = StyleSheet.create({
     paddingBottom: 14,
     marginBottom: 6,
     backgroundColor: "#fff",
-    borderRadius: 4,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2
+    borderRadius: 5,
+    ...box_shadow
   },
   text: {
     maxWidth: "85%",
-    fontSize: 20,
+    fontSize: 16,
     color: lightDark
   }
 });

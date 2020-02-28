@@ -50,8 +50,10 @@ export default class LocationService {
     LocationService.getCurrentLocation().then(
       ({
         location: {
-          latitude = KIGALI_COORDINATES.latitude,
-          longitude = KIGALI_COORDINATES.longitude
+          coords: {
+            latitude = KIGALI_COORDINATES.latitude,
+            longitude = KIGALI_COORDINATES.longitude
+          } = {}
         } = {}
       }) => {
         mapView.animateCamera({

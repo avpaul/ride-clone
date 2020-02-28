@@ -13,12 +13,15 @@ export default class RouteService {
     this._routes = [];
   }
 
-  toRouteComponent({ origin, destination, type }) {
+  toRouteComponent({ origin, waypoints = [], destination, type }) {
     return (
       <MapViewDirections
         origin={origin}
+        waypoints={waypoints}
         destination={destination}
         mode={DRIVING}
+        optimizeWaypoints
+        splitWaypoints
         strokeWidth={ROUTE_STROKE_WIDTH}
         strokeColor={ROUTE_STROKE_COLOR(type)}
         apikey={GOOGLE_DIRECTION_API_KEY}

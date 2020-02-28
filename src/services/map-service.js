@@ -14,7 +14,7 @@ export default class MapService {
           longitude = KIGALI_COORDINATES.longitude
         } = {}
       }) => {
-        this.mapView.animateCamera({
+        this.mapView.animateCamera && this.mapView.animateCamera({
           center: {
             latitude,
             longitude
@@ -31,7 +31,7 @@ export default class MapService {
     heading = INITIAL_HEADING,
     zoom = INITIAL_ZOOM
   ) {
-    this.mapView.animateCamera({
+    this.mapView.animateCamera && this.mapView.animateCamera({
       center: {
         latitude,
         longitude

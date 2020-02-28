@@ -7,32 +7,37 @@ import CurrentPositionIcon from "../../../assets/icons/current-position";
 import { lightDark, touchableLight } from "../../../styles/colors";
 import { SEARCH_PLACEHOLDER } from "../../../constants/searchBar";
 import LocationService from "../../../services/location-service";
+import { INPUT_FONT_SIZE } from "../../../constants/sizes";
+import FadeInView from "../../atoms/Transitions/FadeInView";
+import { box_shadow } from "../../../styles";
 
 const SearchBar = ({ onPress, mapView }) => {
   moveToCurrentLocation = () => {
-    if(Object.keys(mapView).length) LocationService.moveTocurrentLocation(mapView);
+    LocationService.moveTocurrentLocation(mapView);
   };
 
-  const { destination } = useSelector(({search}) => search);
+  const { destination } = useSelector(({ search }) => search);
 
   return (
-    <View style={style.container}>
-      <PositionIcon width={25} height={25} fill="#444" />
-      <TextInput
-        style={style.search_input}
-        placeholderTextColor={lightDark}
-        placeholder={SEARCH_PLACEHOLDER}
-        value={destination}
-        maxLength={0}
-        onFocus={onPress}
-      />
+    <FadeInView style={style.container}>
+      <View style={style.wrapper}>
+        <PositionIcon width={22} height={22} fill="#444" />
+        <TextInput
+          style={style.search_input}
+          placeholderTextColor={lightDark}
+          placeholder={SEARCH_PLACEHOLDER}
+          value={destination}
+          maxLength={0}
+          onFocus={onPress}
+        />
+      </View>
       <TouchableHighlight
         underlayColor={touchableLight}
         onPress={moveToCurrentLocation}
       >
-        <CurrentPositionIcon width={25} height={25} />
+        <CurrentPositionIcon width={22} height={22} />
       </TouchableHighlight>
-    </View>
+    </FadeInView>
   );
 };
 
@@ -41,24 +46,25 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 20,
+    padding: 10,
+    paddingLeft: 15,
+    paddingRight:15,
     paddingTop: 8,
     paddingBottom: 8,
     backgroundColor: "#fff",
-    borderRadius: 4,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2
+    borderRadius: 5,
+    ...box_shadow,
+  },
+  wrapper:{
+    flexDirection: 'row',
+    alignItems:'center',
+    maxWidth: "80%",
   },
   search_input: {
     padding: 10,
-    maxWidth: "70%",
-    fontSize: 20
+    maxWidth: "100%",
+    marginLeft: 10,
+    fontSize: INPUT_FONT_SIZE
   }
 });
 

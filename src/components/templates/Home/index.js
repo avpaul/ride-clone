@@ -23,7 +23,8 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   toolbar: {
-    padding: 20
+    padding: 10,
+    paddingTop:5
   },
   mapView:{
     position: "absolute",

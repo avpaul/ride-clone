@@ -4,10 +4,11 @@ import { StyleSheet, View } from "react-native";
 import OriginSearchBar from "../../molecules/OriginSearchBar";
 import DestinationSearchBar from "../../molecules/DestinationSearchBar";
 import { primaryColor } from "../../../styles/colors";
+import FadeInView from "../../atoms/Transitions/FadeInView";
 
 const ExtendedSearchBar = ({ style, setToggled }) => {
   return (
-    <View style={{ ...style, ..._style.container }}>
+    <FadeInView style={{ ...style, ..._style.container }}>
       <OriginSearchBar onCancel={() => setToggled(false)} />
 
       <View style={_style.separator} />
@@ -15,7 +16,7 @@ const ExtendedSearchBar = ({ style, setToggled }) => {
       <DestinationSearchBar />
 
       <View style={_style.connector} />
-    </View>
+    </FadeInView>
   );
 };
 
@@ -28,7 +29,7 @@ const _style = StyleSheet.create({
     top:20,
     left: 26.8,
     width: 1,
-    height: 80,
+    height: 75,
     backgroundColor: primaryColor
   }
 });
