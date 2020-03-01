@@ -1,6 +1,6 @@
-import firebase from "firebase";
-import "firebase/firestore";
-import { firebaseConfig } from "../../env";
+import firebase from 'firebase';
+import 'firebase/firestore';
+import { firebaseConfig } from '../../env';
 
 class FirebaseService {
   constructor() {
@@ -10,7 +10,11 @@ class FirebaseService {
 
   initializeApp() {
     try {
-      firebase.initializeApp(firebaseConfig.staging);
+      // in case of multiple apps, check each apps name
+      // to avoid Firebase App already exists error
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig.staging);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -92,7 +96,9 @@ class FirebaseService {
       }
 
       const result = [];
-      snapshot.forEach(doc => result.push({ ...doc.data(), key: doc.id }));
+      snapshot.forEach(doc => {
+        result.push({ ...doc.data(), key: doc.id });
+      });
 
       return result;
     } catch (e) {
