@@ -14,14 +14,15 @@ export default class MapService {
           longitude = KIGALI_COORDINATES.longitude
         } = {}
       }) => {
-        this.mapView.animateCamera && this.mapView.animateCamera({
-          center: {
-            latitude,
-            longitude
-          },
-          heading,
-          zoom
-        });
+        this.mapView.current.animateCamera &&
+          this.mapView.current.animateCamera({
+            center: {
+              latitude,
+              longitude
+            },
+            heading,
+            zoom
+          });
       }
     );
   }
@@ -31,13 +32,15 @@ export default class MapService {
     heading = INITIAL_HEADING,
     zoom = INITIAL_ZOOM
   ) {
-    this.mapView.animateCamera && this.mapView.animateCamera({
-      center: {
-        latitude,
-        longitude
-      },
-      heading,
-      zoom
-    });
+    latitude &&
+      this.mapView.current.animateCamera &&
+      this.mapView.current.animateCamera({
+        center: {
+          latitude,
+          longitude
+        },
+        heading,
+        zoom
+      });
   }
 }

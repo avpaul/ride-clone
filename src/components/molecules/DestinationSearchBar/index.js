@@ -25,7 +25,7 @@ const DestinationSearchBar = () => {
     });
   }, 1000);
 
-  handleSearch = query => {
+  const handleSearch = query => {
     setLoading(true);
     if (query) debounceCallback(query);
   };

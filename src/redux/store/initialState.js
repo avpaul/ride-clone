@@ -10,5 +10,13 @@ export default {
   },
   guide: {
     destinationRoute: {}
+  },
+  loader: {
+    message: null,
+    loading: false
+  },
+  routes: {
+    pointRoutes: { loading: false, data: [], error: null },
+    selectedPointRoute: null
   }
 };

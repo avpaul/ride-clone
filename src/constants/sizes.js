@@ -1,1 +1,1 @@
-export const INPUT_FONT_SIZE = 16;
+export const INPUT_FONT_SIZE = 18;

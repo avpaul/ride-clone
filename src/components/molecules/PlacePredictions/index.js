@@ -10,6 +10,9 @@ import { setSearchSelection } from "../../../redux/actions/search";
 import { box_shadow } from "../../../styles";
 import GuideService from "../../../services/guide-service";
 import { setDestinationRoute } from "../../../redux/actions/guide";
+import { clearAutocompletePredictions } from "../../../redux/actions/places/autocompletePlaces";
+import placesService from "../../../services/places-service";
+import MapService from "../../../services/map-service";
 
 const PlacePredictions = ({
   style,
@@ -21,18 +24,23 @@ const PlacePredictions = ({
 }) => {
   const dispatch = useDispatch();
   const guideService = new GuideService();
+  const mapService = new MapService(mapView);
 
   const { currentLocation: { coords: currentLocation } = {} } = useSelector(({ location }) => location);
 
-  const handleSelection = index => {
+  const handleSelection = async index => {
+    clearAutocompletePredictions()(dispatch);
+
     onSelection();
     toggleSearchBar();
 
     const address = predictions[index].description;
-
     setSearchSelection({ [type]: address })(dispatch);
 
-    handleDestination(address);
+    const addressLocation = await placesService.getPlaceLatLng(address);
+    mapService.moveToLocation(addressLocation);
+
+    // handleDestination(address); TOBE: Used in the future to get route suggestions
   };
 
   const handleDestination = async destinationAddress => {

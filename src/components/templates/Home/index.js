@@ -23,6 +23,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   toolbar: {
+    marginTop:10,
     padding: 10,
     paddingTop:5
   },

@@ -4,25 +4,42 @@ import MapView from "../../atoms/MapView";
 import HomeTemplate from "../../templates/Home";
 import Toolbar from "../../organisms/Toolbar";
 import PointService from "../../../services/point-service";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import RouteService from "../../../services/route-service";
 import placesService from "../../../services/places-service";
 import { Marker } from "react-native-maps";
 import GuideService from "../../../services/guide-service";
 import Point from "../../atoms/Point";
 import { ACTIVE } from "../../../constants/point";
-import BottomNavigation from '../../organisms/BottomNavigation';
+import BottomNavigation from "../../organisms/BottomNavigation";
+import {
+  directionsToNearestPoints,
+  handlePointPressed,
+  handleLocationChange,
+  handleSetSelectedPointRoute
+} from "../../../handlers/home";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const routeService = new RouteService();
   const guideService = new GuideService();
+  const dispatch = useDispatch();
 
   const [routes, setRoutes] = useState([]);
+  const [routesMarker, setRoutesMarker] = useState([]);
+  const [nearestPointsRoutes, setNearestPointsRoutes] = useState([]);
   const [mapView, setMapView] = useState({});
   const [unFocusedToolbar, setUnFocusedToolbar] = useState(false);
-  const [cityPoints, setCityPoints] = useState([]);
+  const [nearByPoints, setNearByPoints] = useState([]);
   const [destinationLocation, setDestinationLocation] = useState();
-  const [destinationPoint, setDestinationPoint] = useState();
+
+  const { currentLocation } = useSelector(({ location }) => location);
+  const selectedPointRoute = useSelector(
+    ({ routes: { selectedPointRoute } }) => selectedPointRoute
+  );
+
+  useEffect(() => {
+    handleSetSelectedPointRoute(selectedPointRoute, setRoutes, routeService);
+  }, [selectedPointRoute]);
 
   const handleMapPress = () => {
     setUnFocusedToolbar(true);
@@ -33,31 +50,44 @@ const Home = () => {
   };
 
   const handleNavigation = (screen, props) => {
-    navigation.navigate(screen,{...props});
+    navigation.navigate(screen, { ...props });
   };
 
-  const onMapReady = async () => {
-    setCityPoints(await PointService.getCityPoints());
+  const onPointPressed = async data => {
+    await handlePointPressed(
+      data,
+      setNearestPointsRoutes,
+      setRoutesMarker,
+      dispatch
+    );
   };
-
-  const { destinationRoute = {} } = useSelector(({ guide }) => guide);
-
-  const {
-    points: [origin, ...waypoints] = [],
-    name: routeName
-  } = destinationRoute;
 
   useEffect(() => {
-    if (origin)
-      setRoutes(
-        routeService.addRoute({
-          id: routeName,
-          origin,
-          waypoints,
-          destination: waypoints.pop()
-        })
-      );
-  }, [destinationRoute]);
+    const updateCurrentLocation = async () => {
+      if (currentLocation)
+        setNearByPoints(
+          await PointService.getNearbyPoints(
+            { onPress: onPointPressed },
+            currentLocation
+          )
+        );
+    };
+    updateCurrentLocation();
+  }, [currentLocation]);
+
+  const onMapReady = async mapRef => {
+    setMapView(mapRef);
+
+    handleLocationChange(dispatch, async () =>
+      setNearByPoints(
+        await PointService.getNearbyPoints(
+          { onPress: onPointPressed },
+          currentLocation
+        )
+      )
+    );
+    directionsToNearestPoints(setNearestPointsRoutes)(dispatch);
+  };
 
   const { destination: destinationAddress } = useSelector(
     ({ search }) => search
@@ -75,18 +105,6 @@ const Home = () => {
     showDestinationMarker();
   }, [destinationAddress]);
 
-  useEffect(() => {
-    const showDestinationLocation = async () => {
-      if (destinationLocation) {
-        const destinationPointLocation = await guideService.getClosestPointToDestination(
-          destinationLocation
-        );
-        setDestinationPoint(<Point coordinate={destinationPointLocation} type={ACTIVE}/>);
-      }
-    };
-    showDestinationLocation();
-  }, [destinationLocation]);
-
   return (
     <View>
       <HomeTemplate
@@ -95,12 +113,14 @@ const Home = () => {
             mapRef={handleSetMapView}
             onPress={handleMapPress}
             onMapReady={onMapReady}
-            markers={[...cityPoints, destinationLocation, destinationPoint]}
-            routes={routes}
+            markers={[...nearByPoints, routesMarker, destinationLocation]}
+            routes={[...routes, ...nearestPointsRoutes]}
           />
         }
         toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
-        bottomNavigation={<BottomNavigation navigationHandler={handleNavigation}/>}
+        bottomNavigation={
+          <BottomNavigation navigationHandler={handleNavigation} />
+        }
       />
     </View>
   );

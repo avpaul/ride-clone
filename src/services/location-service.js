@@ -9,6 +9,7 @@ import {
 } from "../constants/location-service";
 import { INITIAL_ZOOM, INITIAL_HEADING } from "../constants/map";
 import { KIGALI_COORDINATES } from "../constants/coordinates";
+import { setCurrentLocation } from "../redux/actions/location";
 
 export default class LocationService {
   static async locationPremissionGranted() {
@@ -19,7 +20,7 @@ export default class LocationService {
     return false;
   }
 
-  static async getCurrentLocation() {
+  static async getCurrentLocation(dispatch) {
     let message;
     let location;
 
@@ -36,10 +37,25 @@ export default class LocationService {
     }
 
     location = await Location.getCurrentPositionAsync({});
+    
+    if(dispatch) setCurrentLocation(location.coords)(dispatch);
+
     return {
       message,
       location
     };
+  }
+
+  static watchLocation(dispatch, setNearByPoints) {
+    Location.watchPositionAsync({
+      enableHighAccuracy: true,
+      timeInterval: 60000,
+      distanceInterval: 5
+    }).then(() => {
+      LocationService.getCurrentLocation(dispatch);
+
+      setNearByPoints();
+    });
   }
 
   static moveTocurrentLocation(
