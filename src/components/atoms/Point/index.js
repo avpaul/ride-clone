@@ -5,9 +5,15 @@ import point from "../../../assets/images/drop-off-point.png";
 import activePoint from "../../../assets/images/drop-off-point-active.png";
 import parking from "../../../assets/images/parking.png";
 import { ACTIVE, PARKING } from "../../../constants/point";
+import {
+  clearPointRoutes,
+  clearSelectedPointRoute
+} from "../../../redux/actions/routes";
+import { useDispatch } from "react-redux";
 
-const Point = ({ id, title, name, type, coordinate }) => {
+const Point = ({ id, title, name, type, latitude, longitude, onPress }) => {
   const [image, setImage] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     switch (type) {
@@ -22,9 +28,22 @@ const Point = ({ id, title, name, type, coordinate }) => {
     }
   });
 
+  const handleOnPress = () => {
+    clearPointRoutes()(dispatch);
+    clearSelectedPointRoute()(dispatch);
+    onPress({ latitude, longitude, id });
+  };
+
   return (
     <Marker
-      {...{ title, description: name, image, coordinate, identifier: id }}
+      {...{
+        title,
+        description: name,
+        image,
+        coordinate: { latitude, longitude },
+        identifier: id,
+        onPress: handleOnPress
+      }}
     />
   );
 };
@@ -32,15 +51,19 @@ const Point = ({ id, title, name, type, coordinate }) => {
 Point.defaultProps = {
   title: "",
   name: "",
-  type: ""
+  type: "",
+  id: "",
+  onPress: () => null
 };
 
 Point.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   title: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
-  coordinate: PropTypes.instanceOf(Object).isRequired
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  onPress: PropTypes.func
 };
 
 export default Point;

@@ -16,12 +16,15 @@ function MapViewWrapper({
   markers,
   routes,
   children,
+  onMapReady,
   ...props
 }) {
   const mapView = useRef();
   const dispatch = useDispatch();
 
   const mapReady = async () => {
+    onMapReady(mapView);
+
     const { location } = await LocationService.getCurrentLocation();
     setCurrentLocation(location)(dispatch);
     
@@ -60,14 +63,16 @@ MapViewWrapper.defaultProps = {
   mapRef: () => null,
   initialRegion: KIGALI_COORDINATES,
   markers: [],
-  routes: []
+  routes: [],
+  onMapReady: () => null,
 };
 
 MapViewWrapper.propTypes = {
   mapRef: PropTypes.func,
   initialRegion: PropTypes.instanceOf(Object),
   markers: PropTypes.instanceOf(Array),
-  routes: PropTypes.instanceOf(Array)
+  routes: PropTypes.instanceOf(Array),
+  onMapReady: PropTypes.func,
 };
 
 const _style = StyleSheet.create({

@@ -10,6 +10,8 @@ import placesService from "../../../services/places-service";
 import { setAutocompletePredictions } from "../../../redux/actions/places/autocompletePlaces";
 import { useDispatch, useSelector } from "react-redux";
 import ActivityIndicator from "../../atoms/ActivityIndicator";
+import { INPUT_FONT_SIZE } from "../../../constants/sizes";
+import { box_shadow } from "../../../styles";
 
 const OriginSearchBar = ({ onCancel }) => {
   const dispatch = useDispatch();
@@ -74,15 +76,8 @@ const style = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 14,
     backgroundColor: "#fff",
-    borderRadius: 4,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2
+    borderRadius: 5,
+    ...box_shadow
   },
   left_container: {
     flexDirection: "row",
@@ -92,7 +87,7 @@ const style = StyleSheet.create({
   search_input: {
     width: "90%",
     maxWidth: "90%",
-    fontSize: 20,
+    fontSize: INPUT_FONT_SIZE,
     marginLeft: 20
   }
 });

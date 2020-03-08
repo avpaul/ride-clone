@@ -4,10 +4,18 @@ import { useSelector } from "react-redux";
 import SearchBar from "../../molecules/SearchBar";
 import ExtendedSearchBar from "../../molecules/ExtendedSearchBar";
 import PlacePredictions from "../../molecules/PlacePredictions";
+import Loader from "../../atoms/Loader";
+import PointRoutes from "../../atoms/PointRoutes";
 
 const Toolbar = ({ unFocused, mapView, onSelection }) => {
   const [toggled, setToggled] = useState(false);
-  const { autocompletePredictions:{ predictions, type } } = useSelector(({ places }) => places);
+  const {
+    autocompletePredictions: { predictions, type }
+  } = useSelector(({ places }) => places);
+
+  const { message: loaderMessage, loading: loaderLoading } = useSelector(
+    ({ loader }) => loader
+  );
 
   useEffect(() => {
     if (unFocused) setToggled(false);
@@ -15,11 +23,21 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
 
   return (
     <React.Fragment>
-      {!toggled && <SearchBar onPress={() => setToggled(true)} mapView={mapView}/>}
+      <SearchBar
+        onPress={() => setToggled(true)}
+        mapView={mapView}
+        setToggled={setToggled}
+      />
 
-      {toggled && <ExtendedSearchBar setToggled={setToggled} />}
+      {loaderLoading && (
+        <Loader style={_style.loader} message={loaderMessage} />
+      )}
 
-      {toggled && (
+      <PointRoutes style={_style.point_routes} />
+
+      {false && <ExtendedSearchBar setToggled={setToggled} />}
+
+      {true && (
         <PlacePredictions
           style={_style.placePredictions}
           predictions={predictions}
@@ -36,6 +54,12 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
 const _style = {
   placePredictions: {
     marginTop: 20
+  },
+  loader: {
+    marginTop: 10
+  },
+  point_routes: {
+    marginTop: 10
   }
 };
 
@@ -48,7 +72,7 @@ Toolbar.propTypes = {
   style: PropTypes.instanceOf(Object),
   unFocused: PropTypes.bool.isRequired,
   mapView: PropTypes.instanceOf(Object).isRequired,
-  onSelection: PropTypes.func,
+  onSelection: PropTypes.func
 };
 
 export default Toolbar;
