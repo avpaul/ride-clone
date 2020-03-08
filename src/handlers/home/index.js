@@ -6,6 +6,10 @@ import { toggleLoader } from "../../redux/actions/loader";
 import { LOADING_ROUTE, LOADING_NEAREST_ROUTE } from "../../constants/loader";
 import ViewRoutesMarker from "../../components/atoms/ViewRoutesMarker";
 import { setSelectedPointRoute } from "../../redux/actions/routes";
+import { Marker } from "react-native-maps";
+import PointService from "../../services/point-service";
+import MapService from "../../services/map-service";
+import VehicleService from "../../services/vehicle-service";
 
 const guideService = new GuideService();
 
@@ -88,11 +92,43 @@ export const handlePointPressed = async (
         latitude,
         longitude
       },
-      id: "1"
+      id
     })
   );
 
   toggleLoader({ loading: false })(dispatch);
+};
+
+export const handleSelectedPointMarkers = (
+  selectedPointRoute,
+  setSelectedRouteMarkers
+) => {
+  if (!selectedPointRoute) return setSelectedRouteMarkers([]);
+  const markers = selectedPointRoute.points.map(({ latitude, longitude }) =>
+    PointService.point({
+      id: longitude,
+      latitude,
+      longitude
+    })
+  );
+  setSelectedRouteMarkers(markers);
+};
+
+export const handleSetVehicles = (vehicles, setVehiclesMarkers, mapView) => {
+  const mapService = new MapService(mapView);
+  const markers = vehicles.map(({ latitude, longitude, id }) =>
+    VehicleService.vehicle({
+      id,
+      latitude,
+      longitude
+    })
+  );
+  setVehiclesMarkers(markers);
+  if (vehicles[0] && vehicles[0].latitude)
+    mapService.moveToLocation({
+      latitude: vehicles[0].latitude,
+      longitude: vehicles[0].longitude
+    });
 };
 
 export const handleLocationChange = async (dispatch, setNearByPoints) => {

@@ -40,7 +40,8 @@ const reducer = (
         pointRoutes: {
           loading: true,
           data: [],
-          error: null
+          error: null,
+          loaded: false,
         }
       };
     case LOAD_POINT_ROUTES_SUCCESS:
@@ -49,7 +50,8 @@ const reducer = (
         pointRoutes: {
           loading: false,
           data: payload,
-          error: null
+          error: null,
+          loaded: true,
         }
       };
     case LOAD_POINT_ROUTES_ERROR:

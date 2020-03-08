@@ -9,14 +9,14 @@ import RouteService from "../../../services/route-service";
 import placesService from "../../../services/places-service";
 import { Marker } from "react-native-maps";
 import GuideService from "../../../services/guide-service";
-import Point from "../../atoms/Point";
-import { ACTIVE } from "../../../constants/point";
 import BottomNavigation from "../../organisms/BottomNavigation";
 import {
   directionsToNearestPoints,
   handlePointPressed,
   handleLocationChange,
-  handleSetSelectedPointRoute
+  handleSetSelectedPointRoute,
+  handleSelectedPointMarkers,
+  handleSetVehicles
 } from "../../../handlers/home";
 
 const Home = ({ navigation }) => {
@@ -25,7 +25,9 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const [routes, setRoutes] = useState([]);
+  const [vehiclesMarkers, setVehiclesMarkers] = useState([]);
   const [routesMarker, setRoutesMarker] = useState([]);
+  const [selectedRouteMarkers, setSelectedRouteMarkers] = useState([]);
   const [nearestPointsRoutes, setNearestPointsRoutes] = useState([]);
   const [mapView, setMapView] = useState({});
   const [unFocusedToolbar, setUnFocusedToolbar] = useState(false);
@@ -36,10 +38,7 @@ const Home = ({ navigation }) => {
   const selectedPointRoute = useSelector(
     ({ routes: { selectedPointRoute } }) => selectedPointRoute
   );
-
-  useEffect(() => {
-    handleSetSelectedPointRoute(selectedPointRoute, setRoutes, routeService);
-  }, [selectedPointRoute]);
+  const { data: vehicles } = useSelector(({ vehicles }) => vehicles);
 
   const handleMapPress = () => {
     setUnFocusedToolbar(true);
@@ -61,6 +60,15 @@ const Home = ({ navigation }) => {
       dispatch
     );
   };
+
+  useEffect(() => {
+    handleSetVehicles(vehicles, setVehiclesMarkers, mapView);
+  }, [vehicles]);
+
+  useEffect(() => {
+    handleSetSelectedPointRoute(selectedPointRoute, setRoutes, routeService);
+    handleSelectedPointMarkers(selectedPointRoute, setSelectedRouteMarkers);
+  }, [selectedPointRoute]);
 
   useEffect(() => {
     const updateCurrentLocation = async () => {
@@ -93,13 +101,19 @@ const Home = ({ navigation }) => {
     ({ search }) => search
   );
 
-  useEffect(() => {
+  useEffect(() => { // Searches for the provided location then shows the nearest bus stops
     const showDestinationMarker = async () => {
       if (destinationAddress) {
         const destination = await placesService.getPlaceLatLng(
           destinationAddress
-        );
-        setDestinationLocation(<Marker coordinate={destination} />);
+          );
+          setDestinationLocation(<Marker coordinate={destination} />);
+        setNearByPoints(
+          await PointService.getNearbyPoints(
+            { onPress: onPointPressed },
+            destination
+          )
+        )
       }
     };
     showDestinationMarker();
@@ -113,7 +127,13 @@ const Home = ({ navigation }) => {
             mapRef={handleSetMapView}
             onPress={handleMapPress}
             onMapReady={onMapReady}
-            markers={[...nearByPoints, routesMarker, destinationLocation]}
+            markers={[
+              ...nearByPoints,
+              routesMarker,
+              destinationLocation,
+              ...selectedRouteMarkers,
+              ...vehiclesMarkers
+            ]}
             routes={[...routes, ...nearestPointsRoutes]}
           />
         }

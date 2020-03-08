@@ -1,17 +1,23 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import BottomNavigationButton from '../../molecules/BottomNavigationButton';
-import CancelIcon from '../../../assets/icons/close-cp.svg';
-import RouteIcon from '../../../assets/icons/road-sign.svg';
-import { height, width } from '../../../constants/dimensions';
-import { whiteColor, transparent } from '../../../styles/colors';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import BottomNavigationButton from "../../molecules/BottomNavigationButton";
+import CancelIcon from "../../../assets/icons/close-cp.svg";
+import RouteIcon from "../../../assets/icons/road-sign.svg";
+import { height, width } from "../../../constants/dimensions";
+import { whiteColor, transparent } from "../../../styles/colors";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  clearPointRoutes,
+  clearSelectedPointRoute
+} from "../../../redux/actions/routes";
+import { clearAutocompletePredictions } from "../../../redux/actions/places/autocompletePlaces";
+import { cancelRoutePreview } from "../../../redux/actions/navigation";
 
 const _styles = StyleSheet.create({
   wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     paddingBottom: height(4),
     paddingLeft: width(4),
     paddingRight: width(4)
@@ -19,12 +25,21 @@ const _styles = StyleSheet.create({
 });
 
 const BottomNavigation = ({ navigationHandler }) => {
-  const previewRoute = useSelector(state => state.routePreview);
+  const dispatch = useDispatch();
+
+  const { routePreview } = useSelector(({ navigation }) => navigation);
 
   const cancelHandler = () => {};
 
   const routesHandler = () => {
-    navigationHandler('Routes', {});
+    navigationHandler("Routes", {});
+  };
+
+  const handleCancelPressed = () => {
+    clearPointRoutes()(dispatch);
+    clearSelectedPointRoute()(dispatch);
+    clearAutocompletePredictions()(dispatch);
+    cancelRoutePreview()(dispatch);
   };
 
   return (
@@ -32,23 +47,24 @@ const BottomNavigation = ({ navigationHandler }) => {
       <View
         style={{
           ..._styles.wrapper,
-          justifyContent: previewRoute ? 'space-between' : 'flex-end'
+          justifyContent: routePreview ? "space-between" : "flex-end"
         }}
       >
-        {previewRoute && (
+        {routePreview && (
           <BottomNavigationButton
-            title={'Cancel'}
+            title={"Cancel"}
             Icon={CancelIcon}
             pressHandler={cancelHandler}
-            label={'Cancel'}
+            label={"Cancel"}
             size={24}
+            pressHandler={handleCancelPressed}
           />
         )}
         <BottomNavigationButton
-          title={'Routes'}
+          title={"Routes"}
           Icon={RouteIcon}
           pressHandler={routesHandler}
-          label={'Routes'}
+          label={"Routes"}
         />
       </View>
     </LinearGradient>

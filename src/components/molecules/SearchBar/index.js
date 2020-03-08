@@ -22,20 +22,22 @@ import { setAutocompletePredictions } from "../../../redux/actions/places/autoco
 import placesService from "../../../services/places-service";
 import { BUS, LOCATION } from "../../../constants/searchBar";
 import MapService from "../../../services/map-service";
+import { getVehicles } from "../../../redux/actions/vehicles/vehicles";
 
 const SearchBar = ({ onPress, mapView }) => {
   const mapService = new MapService(mapView);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [predictions, setPredictions] = useState();
-  const [typeToggled, setTypeToggled] = useState(BUS);
+  const [typeToggled, setTypeToggled] = useState(LOCATION);
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef();
 
   const { currentLocation } = useSelector(({ location }) => location);
+  const { loading: loadingVehicles } = useSelector(({ vehicles }) => vehicles);
 
   const moveToCurrentLocation = () => {
-    mapService.moveToLocation(currentLocation.coords);
+    mapService.moveToLocation(currentLocation);
   };
 
   const [debounceCallback] = useDebouncedCallback(query => {
@@ -57,7 +59,9 @@ const SearchBar = ({ onPress, mapView }) => {
     if (query) debounceCallback(query);
   };
 
-  const handleVehicleSearch = () => null;
+  const handleVehicleSearch = query => {
+    getVehicles(query)(dispatch);
+  };
 
   const handleSearchChange = query => {
     setSearchValue(query);
@@ -83,7 +87,7 @@ const SearchBar = ({ onPress, mapView }) => {
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
-            onPress={handleTypeChange}
+            // onPress={handleTypeChange}
           >
             <LocationToggleIcon width={30} height={30} />
           </TouchableHighlight>
@@ -93,7 +97,7 @@ const SearchBar = ({ onPress, mapView }) => {
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
-            onPress={handleTypeChange}
+            // onPress={handleTypeChange}
           >
             <BusToggleIcon width={30} height={30} />
           </TouchableHighlight>
@@ -105,12 +109,14 @@ const SearchBar = ({ onPress, mapView }) => {
           placeholderTextColor={lightDark}
           placeholder={SEARCH_PLACEHOLDER(typeToggled)}
           value={searchValue}
+          keyboardType={typeToggled === BUS ? "numeric" : null}
+          returnKeyType="done"
           maxLength={100}
           onChangeText={handleSearchChange}
         />
       </View>
 
-      {loading && <ActivityIndicator />}
+      {loading || (loadingVehicles && <ActivityIndicator />)}
 
       <TouchableHighlight
         underlayColor={touchableLight}
