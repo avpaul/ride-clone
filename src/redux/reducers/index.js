@@ -6,6 +6,8 @@ import search from "./search";
 import guide from "./guide";
 import loader from "./loader";
 import routes from "./routes";
+import navigation from "./navigation";
+import vehicles from "./vehicles";
 
 const reducers = combineReducers({
   places,
@@ -14,7 +16,9 @@ const reducers = combineReducers({
   search,
   guide,
   loader,
-  routes
+  routes,
+  navigation,
+  vehicles
 });
 
 export default reducers;

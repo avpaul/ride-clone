@@ -3,22 +3,26 @@ import PropTypes from "prop-types";
 import { View, StyleSheet, ActivityIndicator, Text } from "react-native";
 import { Marker } from "react-native-maps";
 import RouteIcon from "../../../assets/icons/route";
-import {
-  whiteColor,
-  primaryColor
-} from "../../../styles/colors";
+import { whiteColor, primaryColor } from "../../../styles/colors";
 import { getPointRoutes } from "../../../redux/actions/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { SHOW_POINT_ROUTE } from "../../../constants/point";
+import { previewRoute } from "../../../redux/actions/navigation";
 
 const ViewRoutesMarker = ({ id, coordinate, style }) => {
   const dispatch = useDispatch();
 
-  const { loading } = useSelector(({ routes: { pointRoutes } }) => pointRoutes);
+  const { loading, loaded } = useSelector(({ routes: { pointRoutes } }) => pointRoutes);
+  const { routePreview } = useSelector(({ navigation }) => navigation);
 
   const handleGetPointRoutes = () => {
+    previewRoute()(dispatch); // Show cancel button on the bottom
     getPointRoutes(id)(dispatch);
   };
+
+  if(!routePreview){
+    return <></>;
+  }
 
   return (
     <Marker
@@ -35,10 +39,10 @@ const ViewRoutesMarker = ({ id, coordinate, style }) => {
           </View>
         )}
 
-        {!loading && (
+        {!loading && !loaded && (
           <View style={_style.view_routes}>
             <Text style={_style.text}>{SHOW_POINT_ROUTE}</Text>
-            <RouteIcon width={18} height={18}/>
+            <RouteIcon width={20} height={20} />
           </View>
         )}
       </View>
@@ -64,6 +68,7 @@ const _style = StyleSheet.create({
   text: {
     paddingLeft: 5,
     color: whiteColor,
+    fontWeight: "600",
     fontSize: 15
   },
   route: {
@@ -77,7 +82,8 @@ const _style = StyleSheet.create({
   view_routes: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 220,
+    alignItems: 'center',
+    width: 240,
     borderRadius: 5,
     padding: 10,
     backgroundColor: primaryColor

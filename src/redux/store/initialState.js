@@ -18,5 +18,10 @@ export default {
   routes: {
     pointRoutes: { loading: false, data: [], error: null },
     selectedPointRoute: null
+  },
+  vehicles: {
+    data: [],
+    loading: false,
+    error: null
   }
 };
