@@ -1,27 +1,31 @@
 export default {
   places: {
-    autocompletePredictions: {}
+    autocompletePredictions: {},
   },
   location: {},
   map: {},
   search: {
     origin: null,
-    destination: null
+    destination: null,
   },
   guide: {
-    destinationRoute: {}
+    destinationRoute: {},
   },
   loader: {
     message: null,
-    loading: false
+    loading: false,
   },
   routes: {
     pointRoutes: { loading: false, data: [], error: null },
-    selectedPointRoute: null
+    selectedPointRoute: null,
   },
   vehicles: {
     data: [],
     loading: false,
-    error: null
-  }
+    error: null,
+  },
+  toast: {
+    show: false,
+    message: null,
+  },
 };

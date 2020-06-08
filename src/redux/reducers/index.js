@@ -8,6 +8,7 @@ import loader from "./loader";
 import routes from "./routes";
 import navigation from "./navigation";
 import vehicles from "./vehicles";
+import toast from "./toast";
 
 const reducers = combineReducers({
   places,
@@ -18,7 +19,8 @@ const reducers = combineReducers({
   loader,
   routes,
   navigation,
-  vehicles
+  vehicles,
+  toast,
 });
 
 export default reducers;

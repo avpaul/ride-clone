@@ -9,6 +9,7 @@ import RouteService from "../../../services/route-service";
 import placesService from "../../../services/places-service";
 import { Marker } from "react-native-maps";
 import GuideService from "../../../services/guide-service";
+import ToastService from "../../../services/toast-service";
 import BottomNavigation from "../../organisms/BottomNavigation";
 import {
   directionsToNearestPoints,
@@ -16,8 +17,10 @@ import {
   handleLocationChange,
   handleSetSelectedPointRoute,
   handleSelectedPointMarkers,
-  handleSetVehicles
+  handleSetVehicles,
 } from "../../../handlers/home";
+import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
+import { hideToast } from "../../../redux/actions/toast";
 
 const Home = ({ navigation }) => {
   const routeService = new RouteService();
@@ -44,7 +47,7 @@ const Home = ({ navigation }) => {
     setUnFocusedToolbar(true);
   };
 
-  const handleSetMapView = mapRef => {
+  const handleSetMapView = (mapRef) => {
     setMapView(mapRef);
   };
 
@@ -52,7 +55,8 @@ const Home = ({ navigation }) => {
     navigation.navigate(screen, { ...props });
   };
 
-  const onPointPressed = async data => {
+  const onPointPressed = async (data) => {
+    hideToast()(dispatch);
     await handlePointPressed(
       data,
       setNearestPointsRoutes,
@@ -72,18 +76,21 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const updateCurrentLocation = async () => {
-      if (currentLocation)
+      if (currentLocation) {
+        ToastService.showMarkerGuideToast(GUIDE_FOR_MARKER_PRESS, dispatch);
+
         setNearByPoints(
           await PointService.getNearbyPoints(
             { onPress: onPointPressed },
             currentLocation
           )
         );
+      }
     };
     updateCurrentLocation();
   }, [currentLocation]);
 
-  const onMapReady = async mapRef => {
+  const onMapReady = async (mapRef) => {
     setMapView(mapRef);
 
     handleLocationChange(dispatch, async () =>
@@ -101,19 +108,20 @@ const Home = ({ navigation }) => {
     ({ search }) => search
   );
 
-  useEffect(() => { // Searches for the provided location then shows the nearest bus stops
+  useEffect(() => {
+    // Searches for the provided location then shows the nearest bus stops
     const showDestinationMarker = async () => {
       if (destinationAddress) {
         const destination = await placesService.getPlaceLatLng(
           destinationAddress
-          );
-          setDestinationLocation(<Marker coordinate={destination} />);
+        );
+        setDestinationLocation(<Marker coordinate={destination} />);
         setNearByPoints(
           await PointService.getNearbyPoints(
             { onPress: onPointPressed },
             destination
           )
-        )
+        );
       }
     };
     showDestinationMarker();
@@ -132,7 +140,7 @@ const Home = ({ navigation }) => {
               routesMarker,
               destinationLocation,
               ...selectedRouteMarkers,
-              ...vehiclesMarkers
+              ...vehiclesMarkers,
             ]}
             routes={[...routes, ...nearestPointsRoutes]}
           />

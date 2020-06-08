@@ -42,6 +42,8 @@ function MapViewWrapper({
       provider={PROVIDER_GOOGLE}
       customMapStyle={GOOGLE_MAP_SILVER_STYLE}
       showsUserLocation={true}
+      showsMyLocationButton={true}
+      mapPadding={{ top: 0, right: 10, bottom: 110, left: 0 }}
       initialRegion={initialRegion}
       onMapReady={mapReady}
       {...props}

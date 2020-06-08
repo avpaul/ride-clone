@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import LocationToggleIcon from "../../../assets/icons/location-toggle";
 import BusToggleIcon from "../../../assets/icons/bus-toggle";
-import CurrentPositionIcon from "../../../assets/icons/current-position";
 import { lightDark, touchableLight } from "../../../styles/colors";
 import { SEARCH_PLACEHOLDER, DESTINATION } from "../../../constants/searchBar";
 import LocationService from "../../../services/location-service";
@@ -33,12 +32,7 @@ const SearchBar = ({ onPress, mapView }) => {
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef();
 
-  const { currentLocation } = useSelector(({ location }) => location);
   const { loading: loadingVehicles } = useSelector(({ vehicles }) => vehicles);
-
-  const moveToCurrentLocation = () => {
-    mapService.moveToLocation(currentLocation);
-  };
 
   const [debounceCallback] = useDebouncedCallback(query => {
     placesService.getPlaceAutocomplete(query).then(data => {
@@ -116,14 +110,10 @@ const SearchBar = ({ onPress, mapView }) => {
         />
       </View>
 
-      {loading || (loadingVehicles && <ActivityIndicator />)}
+      {loadingVehicles && <ActivityIndicator />}
+      {loading && <ActivityIndicator />}
 
-      <TouchableHighlight
-        underlayColor={touchableLight}
-        onPress={moveToCurrentLocation}
-      >
-        <CurrentPositionIcon width={22} height={22} />
-      </TouchableHighlight>
+      <View/>
     </FadeInView>
   );
 };

@@ -66,9 +66,9 @@ const _style = StyleSheet.create({
     borderRadius: 5
   },
   text: {
+    color: '#fff',
     paddingLeft: 5,
-    color: whiteColor,
-    fontWeight: "600",
+    fontWeight: "500",
     fontSize: 15
   },
   route: {
@@ -86,7 +86,7 @@ const _style = StyleSheet.create({
     width: 240,
     borderRadius: 5,
     padding: 10,
-    backgroundColor: primaryColor
+    backgroundColor: primaryColor,
   }
 });
 
