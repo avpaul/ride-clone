@@ -4,10 +4,12 @@ import RouteOrganism from '../../organisms/Route/index';
 import Toolbar from '../../organisms/AllRoutesToolbar';
 import EmptyRoutesMolecule from '../../molecules/EmptyRoutes';
 import { useDispatch, useSelector } from 'react-redux';
-import routeService from '../../../services/route-service';
+import RouteService from '../../../services/route-service';
 import { setRoutes } from '../../../redux/actions/navigation/index';
 
 const Routes = ({ navigation }) => {
+  const routeService = new RouteService();
+
   const handleNavigation = (screen, props) => {
     navigation.navigate(screen, { ...props });
   };
@@ -20,7 +22,7 @@ const Routes = ({ navigation }) => {
   // get all routes from routes service
   useEffect(() => {
     (async function fetchRoutes() {
-      const routes = await routeService.routes;
+      const routes = await routeService.getAllRoutes();
       setRoutes(routes)(dispatch);
     })();
   }, []);
@@ -32,6 +34,7 @@ const Routes = ({ navigation }) => {
   const routeComponents = () => {
     // when searching routes display search results
     const routes = searchingRoute ? searchRoutes : allRoutes;
+
     return routes.map(routeInfo => (
       <RouteOrganism
         key={routeInfo.key}

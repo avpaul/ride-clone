@@ -1,15 +1,15 @@
-import React from 'react';
-import MapViewDirections from 'react-native-maps-directions';
+import React from "react";
+import MapViewDirections from "react-native-maps-directions";
 import {
   ROUTE_ID_IS_REQUIRED,
   DRIVING,
   ROUTE_STROKE_WIDTH,
-  ROUTE_STROKE_COLOR
-} from '../constants/route-service';
-import { GOOGLE_DIRECTION_API_KEY } from '../../env';
-import firebaseService from './firebase-service';
+  ROUTE_STROKE_COLOR,
+} from "../constants/route-service";
+import { GOOGLE_DIRECTION_API_KEY } from "../../env";
+import firebaseService from "./firebase-service";
 
-class RouteService {
+export default class RouteService {
   constructor() {
     this._routes = [];
   }
@@ -31,18 +31,7 @@ class RouteService {
   }
 
   get routes() {
-    return firebaseService
-      .getCollection('routes')
-      .then(routes => {
-        // console.log(routes);
-        return routes;
-        // don't understand the mapping
-        // (the route object from firebase doesn't have these properties and the _routes array is empty)
-        // return this._routes.map(route => this.toRouteComponent(route));
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    return this._routes.map((route) => this.toRouteComponent(route));
   }
 
   getRouteById(routeId) {
@@ -62,14 +51,14 @@ class RouteService {
 
     this._routes[routeId] = {
       ...this._routes[routeIndex],
-      ...object
+      ...object,
     };
 
     return this.getRouteById(routeId);
   }
 
   addRoutes(routes) {
-    routes.map(route => this.addRoute(route));
+    routes.map((route) => this.addRoute(route));
     return this.routes;
   }
 
@@ -82,7 +71,9 @@ class RouteService {
     this._routes = this._routes.filter(({ id }) => !routesIds.includes(id));
     return this.routes;
   }
-}
 
-const routeService = new RouteService();
-export default routeService;
+  async getAllRoutes(){
+    const routes = await firebaseService.getCollection("routes");
+    return routes;
+  }
+}

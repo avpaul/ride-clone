@@ -3,15 +3,19 @@ import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 
 const _styles = StyleSheet.create({
   routesWrapper: {
-    marginLeft: 16,
-    marginRight: 16,
-    marginTop: 8
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 8,
+    backgroundColor: '#f4f5f9'
+  },
+  safe_area:{
+    backgroundColor: '#000',
   }
 });
 
 const Routes = ({ toolBar, content }) => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={_styles.safe_area}>
       <View>{toolBar}</View>
       <ScrollView style={_styles.routesWrapper}>{content}</ScrollView>
     </SafeAreaView>

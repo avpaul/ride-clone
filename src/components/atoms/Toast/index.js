@@ -29,7 +29,7 @@ const Toast = () => {
 const style = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 100,
+    top: '15%',
     width: "95%",
     marginRight: "2.5%",
     marginLeft: "2.5%",

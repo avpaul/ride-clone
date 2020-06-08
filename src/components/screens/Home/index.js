@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
+import Toast from "../../atoms/Toast";
 import MapView from "../../atoms/MapView";
 import HomeTemplate from "../../templates/Home";
 import Toolbar from "../../organisms/Toolbar";
@@ -128,29 +129,32 @@ const Home = ({ navigation }) => {
   }, [destinationAddress]);
 
   return (
-    <View>
-      <HomeTemplate
-        mapView={
-          <MapView
-            mapRef={handleSetMapView}
-            onPress={handleMapPress}
-            onMapReady={onMapReady}
-            markers={[
-              ...nearByPoints,
-              routesMarker,
-              destinationLocation,
-              ...selectedRouteMarkers,
-              ...vehiclesMarkers,
-            ]}
-            routes={[...routes, ...nearestPointsRoutes]}
-          />
-        }
-        toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
-        bottomNavigation={
-          <BottomNavigation navigationHandler={handleNavigation} />
-        }
-      />
-    </View>
+    <>
+      <View>
+        <HomeTemplate
+          mapView={
+            <MapView
+              mapRef={handleSetMapView}
+              onPress={handleMapPress}
+              onMapReady={onMapReady}
+              markers={[
+                ...nearByPoints,
+                routesMarker,
+                destinationLocation,
+                ...selectedRouteMarkers,
+                ...vehiclesMarkers,
+              ]}
+              routes={[...routes, ...nearestPointsRoutes]}
+            />
+          }
+          toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
+          bottomNavigation={
+            <BottomNavigation navigationHandler={handleNavigation} />
+          }
+        />
+      </View>
+      <Toast />
+    </>
   );
 };
 
