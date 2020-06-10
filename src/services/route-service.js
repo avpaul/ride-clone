@@ -4,9 +4,10 @@ import {
   ROUTE_ID_IS_REQUIRED,
   DRIVING,
   ROUTE_STROKE_WIDTH,
-  ROUTE_STROKE_COLOR
+  ROUTE_STROKE_COLOR,
 } from "../constants/route-service";
 import { GOOGLE_DIRECTION_API_KEY } from "../../env";
+import firebaseService from "./firebase-service";
 
 export default class RouteService {
   constructor() {
@@ -30,7 +31,7 @@ export default class RouteService {
   }
 
   get routes() {
-    return this._routes.map(route => this.toRouteComponent(route));
+    return this._routes.map((route) => this.toRouteComponent(route));
   }
 
   getRouteById(routeId) {
@@ -50,14 +51,14 @@ export default class RouteService {
 
     this._routes[routeId] = {
       ...this._routes[routeIndex],
-      ...object
+      ...object,
     };
 
     return this.getRouteById(routeId);
   }
 
   addRoutes(routes) {
-    routes.map(route => this.addRoute(route));
+    routes.map((route) => this.addRoute(route));
     return this.routes;
   }
 
@@ -69,5 +70,10 @@ export default class RouteService {
   removeRoutes(routesIds) {
     this._routes = this._routes.filter(({ id }) => !routesIds.includes(id));
     return this.routes;
+  }
+
+  async getAllRoutes(){
+    const routes = await firebaseService.getCollection("routes");
+    return routes;
   }
 }

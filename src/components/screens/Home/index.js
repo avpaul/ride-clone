@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
+import Toast from "../../atoms/Toast";
 import MapView from "../../atoms/MapView";
 import HomeTemplate from "../../templates/Home";
 import Toolbar from "../../organisms/Toolbar";
@@ -18,6 +19,7 @@ import {
   handleSetSelectedPointRoute,
   handleSelectedPointMarkers,
   handleSetVehicles,
+  handleSentMarkers,
 } from "../../../handlers/home";
 import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
 import { hideToast } from "../../../redux/actions/toast";
@@ -32,7 +34,7 @@ const Home = ({ navigation }) => {
   const [routesMarker, setRoutesMarker] = useState([]);
   const [selectedRouteMarkers, setSelectedRouteMarkers] = useState([]);
   const [nearestPointsRoutes, setNearestPointsRoutes] = useState([]);
-  const [mapView, setMapView] = useState({});
+  const [mapView, setMapView] = useState();
   const [unFocusedToolbar, setUnFocusedToolbar] = useState(false);
   const [nearByPoints, setNearByPoints] = useState([]);
   const [destinationLocation, setDestinationLocation] = useState();
@@ -41,7 +43,15 @@ const Home = ({ navigation }) => {
   const selectedPointRoute = useSelector(
     ({ routes: { selectedPointRoute } }) => selectedPointRoute
   );
+
   const { data: vehicles } = useSelector(({ vehicles }) => vehicles);
+  const { routePreview } = useSelector(({ navigation }) => navigation);
+  useEffect(() => {
+    if (!routePreview) {
+      setSelectedRouteMarkers([]);
+      setRoutes([])
+    }
+  }, [routePreview]);
 
   const handleMapPress = () => {
     setUnFocusedToolbar(true);
@@ -65,13 +75,38 @@ const Home = ({ navigation }) => {
     );
   };
 
+  const { state: { params: { routeInfo: sentRoute } = {} } = {} } = navigation;
+
+  useEffect(() => {
+    // Show selected route from all routes
+    if (sentRoute) {
+      handleSentMarkers(
+        sentRoute,
+        setSelectedRouteMarkers,
+        setRoutes,
+        routeService,
+        dispatch,
+        mapView
+      );
+    }
+  }, [sentRoute, mapView]);
+
   useEffect(() => {
     handleSetVehicles(vehicles, setVehiclesMarkers, mapView);
   }, [vehicles]);
 
   useEffect(() => {
-    handleSetSelectedPointRoute(selectedPointRoute, setRoutes, routeService);
-    handleSelectedPointMarkers(selectedPointRoute, setSelectedRouteMarkers);
+    handleSetSelectedPointRoute(
+      selectedPointRoute,
+      setRoutes,
+      routeService,
+      mapView
+    );
+    handleSelectedPointMarkers(
+      selectedPointRoute,
+      setSelectedRouteMarkers,
+      mapView
+    );
   }, [selectedPointRoute]);
 
   useEffect(() => {
@@ -128,29 +163,32 @@ const Home = ({ navigation }) => {
   }, [destinationAddress]);
 
   return (
-    <View>
-      <HomeTemplate
-        mapView={
-          <MapView
-            mapRef={handleSetMapView}
-            onPress={handleMapPress}
-            onMapReady={onMapReady}
-            markers={[
-              ...nearByPoints,
-              routesMarker,
-              destinationLocation,
-              ...selectedRouteMarkers,
-              ...vehiclesMarkers,
-            ]}
-            routes={[...routes, ...nearestPointsRoutes]}
-          />
-        }
-        toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
-        bottomNavigation={
-          <BottomNavigation navigationHandler={handleNavigation} />
-        }
-      />
-    </View>
+    <>
+      <View>
+        <HomeTemplate
+          mapView={
+            <MapView
+              mapRef={handleSetMapView}
+              onPress={handleMapPress}
+              onMapReady={onMapReady}
+              markers={[
+                ...nearByPoints,
+                routesMarker,
+                destinationLocation,
+                ...selectedRouteMarkers,
+                ...vehiclesMarkers,
+              ]}
+              routes={[...routes, ...nearestPointsRoutes]}
+            />
+          }
+          toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
+          bottomNavigation={
+            <BottomNavigation navigationHandler={handleNavigation} />
+          }
+        />
+      </View>
+      <Toast />
+    </>
   );
 };
 

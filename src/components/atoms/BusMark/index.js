@@ -7,7 +7,6 @@ import { darkColor } from '../../../styles/colors';
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-end',
     minHeight: 38
@@ -21,13 +20,35 @@ const styles = StyleSheet.create({
   }
 });
 
-const BusStationMark = ({ stationName, size, color }) => {
+const BusStationMark = ({
+  stationName,
+  size,
+  color,
+  direction = 'row',
+  align = 'flex-end',
+  textSize = 14
+}) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        flexDirection: direction,
+        alignItems: align
+      }}
+    >
       <View style={styles.iconWrapper}>
         <BusStationIcon width={size} height={size} fill={color} />
       </View>
-      <Text style={styles.stationName}>{stationName}</Text>
+      <Text
+        style={{
+          ...styles.stationName,
+          marginLeft: direction === 'column' ? 0 : 8,
+          marginRight: direction === 'column' ? 0 : 8,
+          fontSize: textSize
+        }}
+      >
+        {stationName}
+      </Text>
     </View>
   );
 };
