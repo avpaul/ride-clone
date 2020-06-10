@@ -73,7 +73,8 @@ const Point = ({ id, title, name, type, latitude, longitude, onPress }) => {
         description: name,
         coordinate: { latitude, longitude },
         identifier: id,
-        onPress: handleOnPress
+        onPress: handleOnPress,
+        zIndex: !isNaN(id) && (id + 1),
       }}
     >
       {/* {!stopAnimattion && <Animated.View style={{...style.animatedCircle, transform: [{rotate: spin}]}}/>} */}
