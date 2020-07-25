@@ -16,6 +16,7 @@ import VehicleService from "../../services/vehicle-service";
 import { PARKING } from "../../constants/point";
 import { EDGEPADDING } from "../../constants/map";
 import { previewRoute } from "../../redux/actions/navigation";
+import formatDistance from "../../helpers/formatDistance";
 
 const guideService = new GuideService();
 
@@ -40,9 +41,10 @@ export const handleSetSelectedPointRoute = (
   ]);
 };
 
-export const directionsToNearestPoints = (setNearestPointsRoutes) => async (
-  dispatch
-) => {
+export const directionsToNearestPoints = (
+  setNearestPointsRoutes,
+  mapView
+) => async (dispatch) => {
   const routeService = new RouteService();
   toggleLoader({ message: LOADING_NEAREST_ROUTE, loading: true })(dispatch);
 
@@ -53,6 +55,15 @@ export const directionsToNearestPoints = (setNearestPointsRoutes) => async (
   const nearestPoint = await guideService.getClosestPointToDestination(
     currentLocation
   );
+
+  mapView.current.fitToCoordinates([currentLocation, nearestPoint], {
+    edgePadding: {
+      top: 150,
+      bottom: 320,
+      left: 10,
+      right: 40,
+    },
+  });
 
   setNearestPointsRoutes(
     routeService.addRoute({
@@ -72,13 +83,18 @@ export const directionsToNearestPoints = (setNearestPointsRoutes) => async (
 };
 
 export const handlePointPressed = async (
-  { latitude, longitude, id },
+  { latitude, longitude, id, distance },
   setNearestPointsRoutes,
   setRoutesMarker,
   dispatch
 ) => {
   setRoutesMarker([
-    <ViewRoutesMarker key="1" coordinate={{ latitude, longitude }} id={id} />,
+    <ViewRoutesMarker
+      key="1"
+      coordinate={{ latitude, longitude }}
+      distance={`${formatDistance(distance)}Km away`}
+      id={id}
+    />,
   ]);
 
   setNearestPointsRoutes([]);
@@ -130,7 +146,9 @@ export const handleSelectedPointMarkers = (
       })
   );
   setSelectedRouteMarkers(markers);
-  mapView.current.fitToCoordinates(selectedPointRoute.points, { edgePadding: EDGEPADDING });
+  mapView.current.fitToCoordinates(selectedPointRoute.points, {
+    edgePadding: EDGEPADDING,
+  });
 };
 
 export const handleSentMarkers = async (

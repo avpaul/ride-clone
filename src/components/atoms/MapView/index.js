@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import GOOGLE_MAP_SILVER_STYLE from "../../../styles/googleMapSilver";
+import CUSTOM_MAP_STYLE from "../../../styles/customMapStyle";
 import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
 import { KIGALI_COORDINATES } from "../../../constants/coordinates";
 import LocationService from "../../../services/location-service";
@@ -28,7 +28,7 @@ function MapViewWrapper({
     const { location } = await LocationService.getCurrentLocation();
     setCurrentLocation(location)(dispatch);
     
-    LocationService.moveTocurrentLocation(mapView);
+    // LocationService.moveTocurrentLocation(mapView);
   };
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function MapViewWrapper({
       ref={mapView}
       style={{ ..._style, ...style }}
       provider={PROVIDER_GOOGLE}
-      customMapStyle={GOOGLE_MAP_SILVER_STYLE}
+      customMapStyle={CUSTOM_MAP_STYLE}
       showsUserLocation={true}
       showsMyLocationButton={true}
       mapPadding={{ top: 0, right: 10, bottom: 110, left: 0 }}

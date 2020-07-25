@@ -33,9 +33,10 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
         <Loader style={_style.loader} message={loaderMessage} />
       )}
 
-      <PointRoutes style={_style.point_routes} />
+      {/* Shows the list of routes passing by a bus stop */}
+      {false && <PointRoutes style={_style.point_routes} />}
 
-      {false && <ExtendedSearchBar setToggled={setToggled} />}
+      {toggled && <ExtendedSearchBar setToggled={setToggled} />}
 
       {true && (
         <PlacePredictions

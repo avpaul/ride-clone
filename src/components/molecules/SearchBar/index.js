@@ -81,7 +81,7 @@ const SearchBar = ({ onPress, mapView }) => {
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
-            // onPress={handleTypeChange}
+            onPress={handleTypeChange}
           >
             <LocationToggleIcon width={30} height={30} />
           </TouchableHighlight>
@@ -91,7 +91,7 @@ const SearchBar = ({ onPress, mapView }) => {
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
-            // onPress={handleTypeChange}
+            onPress={handleTypeChange}
           >
             <BusToggleIcon width={30} height={30} />
           </TouchableHighlight>
@@ -126,7 +126,6 @@ const style = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     backgroundColor: "#fff",
-    borderRadius: 5,
     ...box_shadow
   },
   wrapper: {

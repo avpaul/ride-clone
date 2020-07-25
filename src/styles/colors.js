@@ -7,3 +7,4 @@ export const lightGrey = '#4F4F4F';
 export const touchableLight = '#f0f0f0';
 export const transparent = '#ffffff00';
 export const yellowColor ='#FFD447';
+export const mapColor = '#e2e3e9';

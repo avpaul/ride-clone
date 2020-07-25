@@ -23,6 +23,7 @@ import {
 } from "../../../handlers/home";
 import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
 import { hideToast } from "../../../redux/actions/toast";
+import BottomSheet from "../../organisms/BottomSheet";
 
 const Home = ({ navigation }) => {
   const routeService = new RouteService();
@@ -49,7 +50,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     if (!routePreview) {
       setSelectedRouteMarkers([]);
-      setRoutes([])
+      setRoutes([]);
     }
   }, [routePreview]);
 
@@ -112,7 +113,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     const updateCurrentLocation = async () => {
       if (currentLocation) {
-        ToastService.showMarkerGuideToast(GUIDE_FOR_MARKER_PRESS, dispatch);
+        // ToastService.showMarkerGuideToast(GUIDE_FOR_MARKER_PRESS, dispatch);
 
         setNearByPoints(
           await PointService.getNearbyPoints(
@@ -136,7 +137,7 @@ const Home = ({ navigation }) => {
         )
       )
     );
-    directionsToNearestPoints(setNearestPointsRoutes)(dispatch);
+    directionsToNearestPoints(setNearestPointsRoutes, mapView)(dispatch);
   };
 
   const { destination: destinationAddress } = useSelector(
@@ -185,6 +186,7 @@ const Home = ({ navigation }) => {
           bottomNavigation={
             <BottomNavigation navigationHandler={handleNavigation} />
           }
+          bottomSheet={<BottomSheet navigation={navigation} />}
         />
       </View>
       <Toast />

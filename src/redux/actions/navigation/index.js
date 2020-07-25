@@ -3,39 +3,53 @@ import {
   ON_ROUTE_PREVIEW,
   SET_ROUTES,
   SET_SEARCH_ROUTES_RESULTS,
-  CLEAR_SEARCH_ROUTES_RESULTS
-} from '../../action-types/navigation';
+  CLEAR_SEARCH_ROUTES_RESULTS,
+  SHOW_BOTTOM_SHEET,
+  HIDE_BOTTOM_SHEET,
+} from "../../action-types/navigation";
 
-export const cancelRoutePreview = payload => dispatch => {
+export const cancelRoutePreview = (payload) => (dispatch) => {
   dispatch({
     type: ON_ROUTE_PREVIEW_CANCEL,
-    payload
+    payload,
   });
 };
 
-export const previewRoute = payload => dispatch => {
+export const previewRoute = (payload) => (dispatch) => {
   dispatch({
     type: ON_ROUTE_PREVIEW,
-    payload
+    payload,
   });
 };
 
-export const setRoutes = payload => dispatch => {
+export const setRoutes = (payload) => (dispatch) => {
   dispatch({
     type: SET_ROUTES,
-    payload
+    payload,
   });
 };
 
-export const setSearchRoutes = payload => dispatch => {
+export const setSearchRoutes = (payload) => (dispatch) => {
   dispatch({
     type: SET_SEARCH_ROUTES_RESULTS,
-    payload
+    payload,
   });
 };
 
-export const clearRoutesSearch = () => dispatch => {
+export const clearRoutesSearch = () => (dispatch) => {
   dispatch({
-    type: CLEAR_SEARCH_ROUTES_RESULTS
+    type: CLEAR_SEARCH_ROUTES_RESULTS,
+  });
+};
+
+export const showBottomSheet = () => (dispatch) => {
+  dispatch({
+    type: SHOW_BOTTOM_SHEET,
+  });
+};
+
+export const hideBottomSheet = () => (dispatch) => {
+  dispatch({
+    type: HIDE_BOTTOM_SHEET,
   });
 };

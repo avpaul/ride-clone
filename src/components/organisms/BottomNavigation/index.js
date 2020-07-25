@@ -5,7 +5,7 @@ import BottomNavigationButton from "../../molecules/BottomNavigationButton";
 import CancelIcon from "../../../assets/icons/close-cp.svg";
 import RouteIcon from "../../../assets/icons/road-sign.svg";
 import { height, width } from "../../../constants/dimensions";
-import { whiteColor, transparent } from "../../../styles/colors";
+import { whiteColor, transparent, mapColor } from "../../../styles/colors";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearPointRoutes,
@@ -43,7 +43,7 @@ const BottomNavigation = ({ navigationHandler }) => {
   };
 
   return (
-    <LinearGradient colors={[transparent, whiteColor, whiteColor]}>
+    <LinearGradient colors={[transparent, mapColor, mapColor]}>
       <View
         style={{
           ..._styles.wrapper,

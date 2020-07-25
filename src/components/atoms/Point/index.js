@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Animated, StyleSheet, Easing } from 'react-native'; 
+import { View, Animated, StyleSheet, Easing } from "react-native";
 import PropTypes from "prop-types";
 import { Marker } from "react-native-maps";
 import point from "../../../assets/images/drop-off-point.png";
@@ -8,13 +8,17 @@ import parking from "../../../assets/images/parking.png";
 import { ACTIVE, PARKING } from "../../../constants/point";
 import {
   clearPointRoutes,
-  clearSelectedPointRoute
+  clearSelectedPointRoute,
+  getPointRoutes,
 } from "../../../redux/actions/routes";
 import { useDispatch } from "react-redux";
-import { previewRoute } from "../../../redux/actions/navigation";
+import {
+  previewRoute,
+  showBottomSheet,
+} from "../../../redux/actions/navigation";
 import { primaryColor } from "../../../styles/colors";
 
-const Point = ({ id, title, name, type, latitude, longitude, onPress }) => {
+const Point = ({ id, index, title, name, type, latitude, longitude, distance, onPress }) => {
   const [image, setImage] = useState();
   const dispatch = useDispatch();
 
@@ -35,46 +39,52 @@ const Point = ({ id, title, name, type, latitude, longitude, onPress }) => {
   const [stopAnimattion, setStopAnimation] = useState(false);
 
   Animated.loop(
-    Animated.timing(
-      spinValue,
-      {
-       toValue: 1,
-       duration: 1000,
-       easing: Easing.linear,
-       useNativeDriver: true
-      }
-    )
-   ).start();
+    Animated.timing(spinValue, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    })
+  ).start();
 
-  useEffect(()=>{
-    setTimeout(()=>{
-     setStopAnimation(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setStopAnimation(true);
     }, 5000);
-  },[]);
+  }, []);
 
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-  })
+    outputRange: ["0deg", "360deg"],
+  });
 
   const handleOnPress = () => {
+
+    // Shows the marker of the bus stop distance
     previewRoute()(dispatch);
-    clearPointRoutes()(dispatch);
+    // clearPointRoutes()(dispatch);
+
     clearSelectedPointRoute()(dispatch);
-    onPress({ latitude, longitude, id });
+    onPress({ latitude, longitude, id, distance });
   };
+
+  useEffect(()=>{
+    if(index === 0){
+      handleOnPress();
+    }
+  }, [index]);
 
   return (
     <Marker
       {...{
-        key:id,
+        key: id,
         title,
         image,
         description: name,
         coordinate: { latitude, longitude },
         identifier: id,
         onPress: handleOnPress,
-        zIndex: !isNaN(id) && (id + 1),
+        zIndex: !isNaN(id) && id + 1,
       }}
     >
       {/* {!stopAnimattion && <Animated.View style={{...style.animatedCircle, transform: [{rotate: spin}]}}/>} */}
@@ -83,15 +93,15 @@ const Point = ({ id, title, name, type, latitude, longitude, onPress }) => {
 };
 
 const style = StyleSheet.create({
-  animatedCircle:{
-    marginTop:8,
-    marginLeft:0,
+  animatedCircle: {
+    marginTop: 8,
+    marginLeft: 0,
     width: 35,
     height: 35,
     borderRadius: 20,
     borderRightWidth: 1,
     borderColor: primaryColor,
-  }
+  },
 });
 
 Point.defaultProps = {
@@ -99,7 +109,7 @@ Point.defaultProps = {
   name: "",
   type: "",
   id: "",
-  onPress: () => null
+  onPress: () => null,
 };
 
 Point.propTypes = {
@@ -109,7 +119,7 @@ Point.propTypes = {
   type: PropTypes.string,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
 };
 
 export default Point;

@@ -23,8 +23,7 @@ const _style = StyleSheet.create({
     ...box_shadow
   },
   message: {
-    color: lightDark,
-    fontSize: 16
+    fontSize: 15
   }
 });
 

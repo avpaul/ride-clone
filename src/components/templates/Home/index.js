@@ -1,15 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { View, StyleSheet } from "react-native";
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView } from "react-navigation";
+
 import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
 
-const HomeTemplate = ({ toolbar, bottomNavigation, mapView }) => {
+const HomeTemplate = ({ toolbar, bottomNavigation, mapView, bottomSheet }) => {
   return (
-    <SafeAreaView style={style.container} forceInset={{ bottom: 'never'}}>
+    <SafeAreaView style={style.container} forceInset={{ bottom: "never" }}>
       <View style={style.mapView}>{mapView}</View>
       <View style={style.toolbar}>{toolbar}</View>
       <View style={style.bottomNavigation}>{bottomNavigation}</View>
+      <View style={style.bottomSheet}>{bottomSheet}</View>
     </SafeAreaView>
   );
 };
@@ -23,21 +25,22 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   toolbar: {
-    marginTop:10,
+    marginTop: 0,
     padding: 10,
-    paddingTop:5
+    paddingTop: 0,
   },
-  mapView:{
+  mapView: {
     position: "absolute",
   },
-  bottomNavigation: {
-
-  }
+  bottomNavigation: {},
+  bottomSheet: {
+    position: "absolute",
+  },
 });
 
 HomeTemplate.defaultProps = {
   toolbar: null,
-  bottomNavigation: null
+  bottomNavigation: null,
 };
 
 HomeTemplate.propTypes = {
@@ -45,6 +48,5 @@ HomeTemplate.propTypes = {
   bottomNavigation: PropTypes.instanceOf(Object),
   mapView: PropTypes.instanceOf(Object).isRequired,
 };
-
 
 export default HomeTemplate;

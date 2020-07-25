@@ -4,15 +4,17 @@ import {
   SET_ROUTES,
   SET_SEARCH_ROUTES_RESULTS,
   CLEAR_SEARCH_ROUTES_RESULTS,
-  SEARCH_ROUTE_ACTIVE
-} from '../../action-types/navigation';
+  SEARCH_ROUTE_ACTIVE,
+  SHOW_BOTTOM_SHEET,
+  HIDE_BOTTOM_SHEET,
+} from "../../action-types/navigation";
 
 const reducer = (
   state = {
     routePreview: false,
     allRoutes: [],
     searchRoutes: [],
-    searchingRoute: false
+    searchingRoute: false,
   },
   { payload, type }
 ) => {
@@ -27,6 +29,10 @@ const reducer = (
       return { ...state, searchRoutes: payload, searchingRoute: true };
     case CLEAR_SEARCH_ROUTES_RESULTS:
       return { ...state, searchRoutes: [], searchingRoute: false };
+    case SHOW_BOTTOM_SHEET:
+      return { ...state, bottomSheet: true };
+    case HIDE_BOTTOM_SHEET:
+      return { ...state, bottomSheet: false };
     default:
       return state;
   }
