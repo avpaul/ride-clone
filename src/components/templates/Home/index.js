@@ -4,14 +4,21 @@ import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-navigation";
 
 import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
+import { useSelector } from "react-redux";
+import { whiteColor } from "../../../styles/colors";
 
 const HomeTemplate = ({ toolbar, bottomNavigation, mapView, bottomSheet }) => {
+
+  const showBottomSheet = useSelector(
+    ({ navigation: { bottomSheet } }) => bottomSheet
+  );
+
   return (
     <SafeAreaView style={style.container} forceInset={{ bottom: "never" }}>
       <View style={style.mapView}>{mapView}</View>
       <View style={style.toolbar}>{toolbar}</View>
       <View style={style.bottomNavigation}>{bottomNavigation}</View>
-      <View style={style.bottomSheet}>{bottomSheet}</View>
+      {showBottomSheet && <View style={style.bottomSheet}>{bottomSheet}</View>}
     </SafeAreaView>
   );
 };
@@ -34,7 +41,10 @@ const style = StyleSheet.create({
   },
   bottomNavigation: {},
   bottomSheet: {
-    position: "absolute",
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: whiteColor,
+    height: '50%',
   },
 });
 

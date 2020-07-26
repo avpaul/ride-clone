@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Animated, StyleSheet, Easing } from "react-native";
 import PropTypes from "prop-types";
 import { Marker } from "react-native-maps";
-import point from "../../../assets/images/drop-off-point.png";
+import point from "../../../../assets/icons/drop-off-point.png";
 import activePoint from "../../../assets/images/drop-off-point-active.png";
 import parking from "../../../assets/images/parking.png";
 import { ACTIVE, PARKING } from "../../../constants/point";

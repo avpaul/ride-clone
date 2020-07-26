@@ -11,10 +11,9 @@ import {
   previewRoute,
   showBottomSheet,
 } from "../../../redux/actions/navigation";
-import PointBadge from "../PointBadge";
 import BusBadge from "../BusBadge";
 
-const ViewRoutesMarker = ({ id, coordinate, distance }) => {
+const ViewBusBadge = ({ id, coordinate, distance }) => {
   const dispatch = useDispatch();
 
   const { loading, loaded } = useSelector(
@@ -42,7 +41,7 @@ const ViewRoutesMarker = ({ id, coordinate, distance }) => {
       style={_style.marker}
       onPress={handleGetPointRoutes}
     >
-       <PointBadge text={distance} />
+      <BusBadge id={id} text={distance} />
 
       {/* <View style={{ ..._style.container, ...style }}>
         {loading && (
@@ -103,8 +102,8 @@ const _style = StyleSheet.create({
   },
 });
 
-ViewRoutesMarker.defaultProps = {};
+ViewBusBadge.defaultProps = {};
 
-ViewRoutesMarker.propTypes = {};
+ViewBusBadge.propTypes = {};
 
-export default ViewRoutesMarker;
+export default ViewBusBadge;

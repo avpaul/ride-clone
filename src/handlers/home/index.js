@@ -17,6 +17,8 @@ import { PARKING } from "../../constants/point";
 import { EDGEPADDING } from "../../constants/map";
 import { previewRoute } from "../../redux/actions/navigation";
 import formatDistance from "../../helpers/formatDistance";
+import distanceToFootTime from "../../helpers/distanceToFootTime";
+import ViewBusBadge from "../../components/atoms/ViewBusBadge";
 
 const guideService = new GuideService();
 
@@ -58,10 +60,10 @@ export const directionsToNearestPoints = (
 
   mapView.current.fitToCoordinates([currentLocation, nearestPoint], {
     edgePadding: {
-      top: 150,
-      bottom: 320,
-      left: 10,
-      right: 40,
+      top: 160,
+      bottom: 280,
+      left: 20,
+      right: 20,
     },
   });
 
@@ -82,6 +84,20 @@ export const directionsToNearestPoints = (
   toggleLoader({ loading: false })(dispatch);
 };
 
+export const handleBusPressed = async (
+  { latitude, longitude, id, distance },
+  setBusBadge
+) => {
+  setBusBadge([
+    <ViewBusBadge
+      key="1"
+      coordinate={{ latitude, longitude }}
+      distance={`${distanceToFootTime(formatDistance(distance))} away`}
+      id={id}
+    />,
+  ]);
+};
+
 export const handlePointPressed = async (
   { latitude, longitude, id, distance },
   setNearestPointsRoutes,
@@ -92,7 +108,7 @@ export const handlePointPressed = async (
     <ViewRoutesMarker
       key="1"
       coordinate={{ latitude, longitude }}
-      distance={`${formatDistance(distance)}Km away`}
+      distance={`${distanceToFootTime(formatDistance(distance))} away`}
       id={id}
     />,
   ]);

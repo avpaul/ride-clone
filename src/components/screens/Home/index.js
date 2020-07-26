@@ -5,6 +5,7 @@ import MapView from "../../atoms/MapView";
 import HomeTemplate from "../../templates/Home";
 import Toolbar from "../../organisms/Toolbar";
 import PointService from "../../../services/point-service";
+import BusService from "../../../services/bus-service";
 import { useSelector, useDispatch } from "react-redux";
 import RouteService from "../../../services/route-service";
 import placesService from "../../../services/places-service";
@@ -20,6 +21,7 @@ import {
   handleSelectedPointMarkers,
   handleSetVehicles,
   handleSentMarkers,
+  handleBusPressed,
 } from "../../../handlers/home";
 import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
 import { hideToast } from "../../../redux/actions/toast";
@@ -31,8 +33,10 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const [routes, setRoutes] = useState([]);
+  const [nearByBuses, setNearByBuses] = useState([]);
   const [vehiclesMarkers, setVehiclesMarkers] = useState([]);
   const [routesMarker, setRoutesMarker] = useState([]);
+  const [busBadge, setBusBadge] = useState([]);
   const [selectedRouteMarkers, setSelectedRouteMarkers] = useState([]);
   const [nearestPointsRoutes, setNearestPointsRoutes] = useState([]);
   const [mapView, setMapView] = useState();
@@ -76,6 +80,14 @@ const Home = ({ navigation }) => {
     );
   };
 
+  const onBusPressed = async (data) => {
+    hideToast()(dispatch);
+    await handleBusPressed(
+      data,
+      setBusBadge,
+    );
+  };
+
   const { state: { params: { routeInfo: sentRoute } = {} } = {} } = navigation;
 
   useEffect(() => {
@@ -113,6 +125,20 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     const updateCurrentLocation = async () => {
       if (currentLocation) {
+        setNearByBuses(
+          await BusService.getNearbyBuses(
+            { onPress: onBusPressed },
+            currentLocation
+          )
+        );
+      }
+    };
+    updateCurrentLocation();
+  }, [currentLocation]);
+
+  useEffect(() => {
+    const updateCurrentLocation = async () => {
+      if (currentLocation) {
         // ToastService.showMarkerGuideToast(GUIDE_FOR_MARKER_PRESS, dispatch);
 
         setNearByPoints(
@@ -129,14 +155,21 @@ const Home = ({ navigation }) => {
   const onMapReady = async (mapRef) => {
     setMapView(mapRef);
 
-    handleLocationChange(dispatch, async () =>
+    handleLocationChange(dispatch, async () => {
+      setNearByBuses(
+        await BusService.getNearbyBuses(
+          { onPress: onBusPressed },
+          currentLocation
+        )
+      );
+
       setNearByPoints(
         await PointService.getNearbyPoints(
           { onPress: onPointPressed },
           currentLocation
         )
-      )
-    );
+      );
+    });
     directionsToNearestPoints(setNearestPointsRoutes, mapView)(dispatch);
   };
 
@@ -174,7 +207,9 @@ const Home = ({ navigation }) => {
               onMapReady={onMapReady}
               markers={[
                 ...nearByPoints,
+                ...nearByBuses,
                 routesMarker,
+                busBadge,
                 destinationLocation,
                 ...selectedRouteMarkers,
                 ...vehiclesMarkers,
