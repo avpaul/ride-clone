@@ -26,6 +26,11 @@ import {
 import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
 import { hideToast } from "../../../redux/actions/toast";
 import BottomSheet from "../../organisms/BottomSheet";
+import {
+  showBottomSheet,
+  showBusesSheet,
+  hideBusesSheet,
+} from "../../../redux/actions/navigation";
 
 const Home = ({ navigation }) => {
   const routeService = new RouteService();
@@ -58,6 +63,14 @@ const Home = ({ navigation }) => {
     }
   }, [routePreview]);
 
+  //Show bottom sheet on start
+  useEffect(() => {
+    if (nearByPoints.length > 0) {
+      showBusesSheet()(dispatch);
+      showBottomSheet()(dispatch);
+    }
+  }, [nearByPoints]);
+
   const handleMapPress = () => {
     setUnFocusedToolbar(true);
   };
@@ -82,10 +95,7 @@ const Home = ({ navigation }) => {
 
   const onBusPressed = async (data) => {
     hideToast()(dispatch);
-    await handleBusPressed(
-      data,
-      setBusBadge,
-    );
+    await handleBusPressed(data, setBusBadge, nearByPoints);
   };
 
   const { state: { params: { routeInfo: sentRoute } = {} } = {} } = navigation;
@@ -124,7 +134,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const updateCurrentLocation = async () => {
-      if (currentLocation) {
+      if (currentLocation && nearByPoints.length > 0) {
         setNearByBuses(
           await BusService.getNearbyBuses(
             { onPress: onBusPressed },
@@ -134,7 +144,7 @@ const Home = ({ navigation }) => {
       }
     };
     updateCurrentLocation();
-  }, [currentLocation]);
+  }, [currentLocation, nearByPoints]);
 
   useEffect(() => {
     const updateCurrentLocation = async () => {
@@ -221,7 +231,13 @@ const Home = ({ navigation }) => {
           bottomNavigation={
             <BottomNavigation navigationHandler={handleNavigation} />
           }
-          bottomSheet={<BottomSheet navigation={navigation} />}
+          bottomSheet={
+            <BottomSheet
+              navigation={navigation}
+              busStop={nearByPoints}
+              buses={nearByBuses}
+            />
+          }
         />
       </View>
       <Toast />

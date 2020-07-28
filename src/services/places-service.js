@@ -29,11 +29,11 @@ class PlacesService {
     );
   }
 
-  async getPlaceAddress(location) {
+  async getPlaceAddress({latitude, longitude}) {
     try {
       const locationString = this.locationString({
-        latitude: "-1.963833",
-        longitude: "30.059793"
+        latitude,
+        longitude,
       });
 
       const {

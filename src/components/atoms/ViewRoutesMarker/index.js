@@ -10,6 +10,7 @@ import { SHOW_POINT_ROUTE } from "../../../constants/point";
 import {
   previewRoute,
   showBottomSheet,
+  hideBusesSheet,
 } from "../../../redux/actions/navigation";
 import PointBadge from "../PointBadge";
 import BusBadge from "../BusBadge";
@@ -25,9 +26,12 @@ const ViewRoutesMarker = ({ id, coordinate, distance }) => {
   const handleGetPointRoutes = () => {
     previewRoute()(dispatch); // Show cancel button on the bottom
     // getPointRoutes(id)(dispatch);
-    getPointRoutes(id, { lat: coordinate.latitude, lon: coordinate.longitude })(
-      dispatch
-    );
+    getPointRoutes(id, {
+      lat: coordinate.latitude,
+      lon: coordinate.longitude,
+      distance,
+    })(dispatch);
+    hideBusesSheet()(dispatch);
     showBottomSheet()(dispatch);
   };
 
@@ -42,7 +46,7 @@ const ViewRoutesMarker = ({ id, coordinate, distance }) => {
       style={_style.marker}
       onPress={handleGetPointRoutes}
     >
-       <PointBadge text={distance} />
+      <PointBadge text={distance} />
 
       {/* <View style={{ ..._style.container, ...style }}>
         {loading && (

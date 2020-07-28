@@ -60,10 +60,10 @@ export const directionsToNearestPoints = (
 
   mapView.current.fitToCoordinates([currentLocation, nearestPoint], {
     edgePadding: {
-      top: 160,
-      bottom: 280,
-      left: 20,
-      right: 20,
+      top: 150,
+      bottom: 290,
+      left: 10,
+      right: 80,
     },
   });
 
@@ -86,13 +86,15 @@ export const directionsToNearestPoints = (
 
 export const handleBusPressed = async (
   { latitude, longitude, id, distance },
-  setBusBadge
+  setBusBadge,
+  nearByPoints
 ) => {
+  console.log({nearByPoints}, "======")
   setBusBadge([
     <ViewBusBadge
       key="1"
       coordinate={{ latitude, longitude }}
-      distance={`${distanceToFootTime(formatDistance(distance))} away`}
+      distance={`${distanceToFootTime(formatDistance(distance), nearByPoints[0])} away`}
       id={id}
     />,
   ]);

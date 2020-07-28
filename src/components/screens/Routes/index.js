@@ -45,7 +45,7 @@ const Routes = ({ navigation }) => {
     return routes.map((routeInfo) => (
       <RouteOrganism
         key={routeInfo.key}
-        routeID={routeInfo.id}
+        routeInfo={routeInfo}
         pressHandler={() => navigateToRoute(routeInfo)}
         stations={[routeInfo.name.split("-")[0], routeInfo.name.split("-")[1]]}
       />

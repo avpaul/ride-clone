@@ -51,12 +51,12 @@ const reducer = (
           loading: false,
           data: payload.foundRoutes,
           pointAdress: payload.pointAdress,
+          distance: payload.distance,
           error: null,
           loaded: true,
         },
       };
     case LOAD_POINT_ROUTES_ERROR:
-      console.log("false dispatched");
       return {
         ...state,
         pointRoutes: {

@@ -7,6 +7,8 @@ import {
   SEARCH_ROUTE_ACTIVE,
   SHOW_BOTTOM_SHEET,
   HIDE_BOTTOM_SHEET,
+  SHOW_BUSES_SHEET,
+  HIDE_BUSES_SHEET,
 } from "../../action-types/navigation";
 
 const reducer = (
@@ -18,6 +20,7 @@ const reducer = (
   },
   { payload, type }
 ) => {
+  console.log({type})
   switch (type) {
     case ON_ROUTE_PREVIEW_CANCEL:
       return { ...state, routePreview: false };
@@ -33,6 +36,10 @@ const reducer = (
       return { ...state, bottomSheet: true };
     case HIDE_BOTTOM_SHEET:
       return { ...state, bottomSheet: false };
+    case SHOW_BUSES_SHEET:
+      return { ...state, showBusesSheet: true };
+    case HIDE_BUSES_SHEET:
+      return { ...state, showBusesSheet: false };
     default:
       return state;
   }

@@ -25,7 +25,7 @@ export const clearPointRoutes = () => (dispatch) =>
     type: LOAD_POINT_ROUTES_CLEAR,
   });
 
-export const getPointRoutes = (id, { lat, lon }) => async (dispatch) => {
+export const getPointRoutes = (id, { lat, lon, distance }) => async (dispatch) => {
   const guideService = new GuideService();
   try {
     dispatch({
@@ -40,7 +40,7 @@ export const getPointRoutes = (id, { lat, lon }) => async (dispatch) => {
 
     dispatch({
       type: LOAD_POINT_ROUTES_SUCCESS,
-      payload: { foundRoutes, pointAdress },
+      payload: { foundRoutes, pointAdress, distance },
     });
   } catch (e) {
     dispatch({

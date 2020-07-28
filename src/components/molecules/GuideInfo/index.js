@@ -1,25 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import pointImage from "../../../assets/images/drop-off-point.png";
-import RouteOrganism from "../../organisms/Route";
-import { hideBottomSheet } from "../../../redux/actions/navigation";
 import ListItem from "../../atoms/ListItem";
+import placesService from "../../../services/places-service";
+import distanceToFootTime from "../../../helpers/distanceToFootTime";
+import formatDistance from "../../../helpers/formatDistance";
 
-const BusStopInfo = ({ navigation }) => {
-  const { loading, data: routes, pointAdress, distance } = useSelector(
-    ({ routes: { pointRoutes } }) => pointRoutes
-  );
+const GuideInfo = ({ navigation, busStop, buses }) => {
+  const [pointAdress, setPointAdress] = useState();
 
-  const dispatch = useDispatch();
-
-  // navigate to the route map
-  const navigateToRoute = (routeInfo) => {
-    navigation.navigate("Home", { routeInfo });
-    hideBottomSheet()(dispatch);
-  };
+  useEffect(() => {
+    placesService
+      .getPlaceAddress({
+        latitude: busStop[0].props.latitude,
+        longitude: busStop[0].props.longitude,
+      })
+      .then((adress) => {
+        setPointAdress(adress);
+      });
+  }, [busStop]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={style.scrollView}>
@@ -29,36 +30,38 @@ const BusStopInfo = ({ navigation }) => {
         <ListItem
           {...{
             headerRight: `${pointAdress ? pointAdress : "Loading.."}`,
-            itemTitle: distance ? `${distance} from your current location` : "",
+            itemTitle: busStop[0]
+              ? `${distanceToFootTime(
+                  formatDistance(busStop[0].props.distance)
+                )} away from your current location`
+              : "",
             renderTitle: true,
             renderHeader: true,
-            headerLeft: '_',
             noNav: true,
             pressHandler: () => null,
           }}
         />
-
-        {loading && (
-          <View style={style.loading}>
-            <Text style={style.text}>Loading bus stop routes..</Text>
-            <ActivityIndicator size="small" />
-          </View>
-        )}
         <View style={style.infoWrapper}>
-          <Text style={style.title}>Routes</Text>
+          <Text style={style.title}>Nearby Buses</Text>
 
-          {!loading &&
-            routes.map((routeInfo) => (
-              <RouteOrganism
-                key={routeInfo.key}
-                routeInfo={routeInfo}
-                pressHandler={() => navigateToRoute(routeInfo)}
-                stations={[
-                  routeInfo.name.split("-")[0],
-                  routeInfo.name.split("-")[1],
-                ]}
-              />
-            ))}
+          {buses.map((bus, index) => (
+            <ListItem
+              {...{
+                itemTitle: bus
+                  ? `Reaching your nearest bus stop in ${distanceToFootTime(
+                      formatDistance(
+                        Math.abs(bus.props.distance - busStop[0].props.distance)
+                      )
+                    )}`
+                  : "",
+                headerLeft: bus.props.id,
+                renderTitle: true,
+                renderHeader: true,
+                isBus: true,
+                pressHandler: () => null,
+              }}
+            />
+          ))}
         </View>
       </View>
     </ScrollView>
@@ -112,4 +115,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default BusStopInfo;
+export default GuideInfo;

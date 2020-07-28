@@ -2,11 +2,18 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { whiteColor } from "../../../styles/colors";
 import BusStopInfo from "../BusStopInfo";
+import GuideInfo from "../GuideInfo";
+import { useSelector } from "react-redux";
 
-const BottomSheetContent = ({ navigation }) => {
+const BottomSheetContent = ({ navigation, busStop, buses }) => {
+  const { showBusesSheet } = useSelector(({ navigation }) => navigation);
+  console.log(showBusesSheet, "==========")
   return (
     <View style={style.container}>
-      <BusStopInfo navigation={navigation} />
+      {!showBusesSheet && <BusStopInfo navigation={navigation} />}
+      {showBusesSheet && (
+        <GuideInfo navigation={navigation} busStop={busStop} buses={buses} />
+      )}
     </View>
   );
 };

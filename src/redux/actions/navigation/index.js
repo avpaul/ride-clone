@@ -6,6 +6,8 @@ import {
   CLEAR_SEARCH_ROUTES_RESULTS,
   SHOW_BOTTOM_SHEET,
   HIDE_BOTTOM_SHEET,
+  SHOW_BUSES_SHEET,
+  HIDE_BUSES_SHEET,
 } from "../../action-types/navigation";
 
 export const cancelRoutePreview = (payload) => (dispatch) => {
@@ -42,6 +44,7 @@ export const clearRoutesSearch = () => (dispatch) => {
   });
 };
 
+
 export const showBottomSheet = () => (dispatch) => {
   dispatch({
     type: SHOW_BOTTOM_SHEET,
@@ -51,5 +54,17 @@ export const showBottomSheet = () => (dispatch) => {
 export const hideBottomSheet = () => (dispatch) => {
   dispatch({
     type: HIDE_BOTTOM_SHEET,
+  });
+};
+
+export const showBusesSheet = () => (dispatch) => {
+  dispatch({
+    type: SHOW_BUSES_SHEET,
+  });
+};
+
+export const hideBusesSheet = () => (dispatch) => {
+  dispatch({
+    type: HIDE_BUSES_SHEET,
   });
 };
