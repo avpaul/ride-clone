@@ -28,10 +28,10 @@ const BusStopInfo = ({ navigation }) => {
 
         <ListItem
           {...{
-            headerRight: `${pointAdress ? pointAdress : "Loading.."}`,
-            itemTitle: distance ? `${distance} from your current location` : "",
+            renderHeader: false,
+            itemTitle: `${pointAdress ? pointAdress : "Loading.."}`,
+            itemSubTitle: distance ? `${distance} from your location` : "",
             renderTitle: true,
-            renderHeader: true,
             headerLeft: '_',
             noNav: true,
             pressHandler: () => null,
@@ -78,7 +78,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "500",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   wrapper: {
     width: "100%",

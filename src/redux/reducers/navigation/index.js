@@ -20,7 +20,6 @@ const reducer = (
   },
   { payload, type }
 ) => {
-  console.log({type})
   switch (type) {
     case ON_ROUTE_PREVIEW_CANCEL:
       return { ...state, routePreview: false };

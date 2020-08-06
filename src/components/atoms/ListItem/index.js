@@ -20,6 +20,7 @@ export default ({
   pressHandler,
   isBus,
   noNav,
+  itemBold,
   ...props
 }) => {
   const { rightComponent = <RightArrow width={30} height={30} /> } = props;
@@ -37,7 +38,7 @@ export default ({
         style={styles.item}
         onPress={pressHandler}
       >
-        <View style={{flexDirection:'row', alignItems: 'center'}}>
+        <View style={{flexDirection:'row', alignItems: 'center', paddingBottom: 15}}>
           <View style={styles.itemLeft}>
             {!isBus && <BusStop width={30} height={30} />}
             {isBus && <Bus width={28} height={28} />}
@@ -46,7 +47,8 @@ export default ({
             {renderTitle && (
               <Text style={[styles.itemTitle, titleStyle]}>{itemTitle}</Text>
             )}
-            <Text style={styles.itemSubTitle}>{itemSubTitle}</Text>
+            {itemSubTitle ? <Text style={styles.itemSubTitle}>{itemSubTitle}</Text> : null}
+            {itemBold ? <Text style={styles.itemBold}>{itemBold}</Text> : null}
           </View>
         </View>
 
@@ -97,17 +99,24 @@ const styles = StyleSheet.create({
   },
   itemCenter: {
     height: 50,
+    width: '100%',
     justifyContent: "flex-start",
     marginLeft: 10,
     marginTop:5
   },
   itemTitle: {
-    fontSize: 16,
-    marginBottom: 10,
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 5,
     maxWidth: '85%'
   },
   itemSubTitle: {
-    fontSize: 18,
-    fontWeight: '400'
+    fontSize: 16,
+    fontWeight: '400',
+    maxWidth: '70%'
   },
+  itemBold:{
+    fontSize: 20,
+    fontWeight: '400',
+  }
 });

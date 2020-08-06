@@ -7,7 +7,7 @@ const RouteOrganism = ({ pressHandler, routeInfo, stations }) => {
       {...{
         headerLeft: routeInfo.id,
         headerRight: `${stations[0]} - ${stations[1]}`,
-        itemSubTitle: `${routeInfo.price} RWF`,
+        itemBold: `${routeInfo.price} RWF`,
         renderTitle: false,
         isBus: true,
         pressHandler

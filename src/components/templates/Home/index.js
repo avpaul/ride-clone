@@ -2,14 +2,22 @@ import React from "react";
 import PropTypes from "prop-types";
 import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-navigation";
+import AlertIcon from "../../../../assets/icons/alert";
 
 import { FULL_WIDTH, FULL_HEIGHT } from "../../../constants/dimensions";
+import { whiteColor } from "../../../styles/colors";
+import { box_shadow } from "../../../styles";
 
 const HomeTemplate = ({ toolbar, bottomNavigation, mapView, bottomSheet }) => {
   return (
     <SafeAreaView style={style.container} forceInset={{ bottom: "never" }}>
       <View style={style.mapView}>{mapView}</View>
-      <View style={style.toolbar}>{toolbar}</View>
+      <View style={style.toolbar}>
+        {toolbar}
+        <View style={style.alert}>
+          <AlertIcon width={30} height={30}/>
+        </View>
+      </View>
       <View style={style.bottomNavigation}>{bottomNavigation}</View>
       <View style={style.bottomSheet}>{bottomSheet}</View>
     </SafeAreaView>
@@ -25,6 +33,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   toolbar: {
+    flexDirection: 'row',
     marginTop: 0,
     padding: 10,
     paddingTop: 0,
@@ -36,6 +45,11 @@ const style = StyleSheet.create({
   bottomSheet: {
     position: "absolute",
   },
+  alert:{
+    padding: 15,
+    backgroundColor: whiteColor,
+    ...box_shadow,
+  }
 });
 
 HomeTemplate.defaultProps = {

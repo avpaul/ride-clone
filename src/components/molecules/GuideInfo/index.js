@@ -25,18 +25,18 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={style.scrollView}>
       <View style={style.container}>
-        <Text style={style.title}>Bus Stop</Text>
+        <Text style={style.title}>Wait for your next bus at:</Text>
 
         <ListItem
           {...{
-            headerRight: `${pointAdress ? pointAdress : "Loading.."}`,
-            itemTitle: busStop[0]
+            itemTitle: `${pointAdress ? pointAdress : "Loading.."}`,
+            itemSubTitle: busStop[0]
               ? `${distanceToFootTime(
                   formatDistance(busStop[0].props.distance)
-                )} away from your current location`
+                )} away from your location`
               : "",
             renderTitle: true,
-            renderHeader: true,
+            renderHeader: false,
             noNav: true,
             pressHandler: () => null,
           }}
@@ -47,7 +47,13 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
           {buses.map((bus, index) => (
             <ListItem
               {...{
-                itemTitle: bus
+                headerRight: bus ? `${distanceToFootTime(
+                  formatDistance(
+                    Math.abs(bus.props.distance - busStop[0].props.distance)
+                  )
+                )} away` : '',
+                itemTitle: bus ? bus.props.route : '',
+                itemSubTitle: bus
                   ? `Reaching your nearest bus stop in ${distanceToFootTime(
                       formatDistance(
                         Math.abs(bus.props.distance - busStop[0].props.distance)

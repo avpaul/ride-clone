@@ -1,8 +1,6 @@
 export default (distance, nearByPoint) => { // 84 meters per minute
     let time = distance * 1000 / 84;
 
-    console.log({nearByPoint})
-
     if(nearByPoint){
         time = Math.abs(time - nearByPoint.props.distance);
     }

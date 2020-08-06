@@ -89,7 +89,6 @@ export const handleBusPressed = async (
   setBusBadge,
   nearByPoints
 ) => {
-  console.log({nearByPoints}, "======")
   setBusBadge([
     <ViewBusBadge
       key="1"

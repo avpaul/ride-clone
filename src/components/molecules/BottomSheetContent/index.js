@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 const BottomSheetContent = ({ navigation, busStop, buses }) => {
   const { showBusesSheet } = useSelector(({ navigation }) => navigation);
-  console.log(showBusesSheet, "==========")
   return (
     <View style={style.container}>
       {!showBusesSheet && <BusStopInfo navigation={navigation} />}

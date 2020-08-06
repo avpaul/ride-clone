@@ -32,7 +32,7 @@ const BottomSheet = ({ navigation, busStop, buses }) => {
       ref={(r) => setRef(r)}
       customStyles={style}
       onClose={handleClose}
-      minClosingHeight={100}
+      minClosingHeight={0}
       height={340}
       closeOnDragDown
     >
