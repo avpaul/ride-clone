@@ -9,24 +9,27 @@ import FadeInView from "../../atoms/Transitions/FadeInView";
 const ExtendedSearchBar = ({ style, setToggled }) => {
   return (
     <FadeInView style={{ ...style, ..._style.container }}>
-      <OriginSearchBar onCancel={() => setToggled(false)} />
+      {/* <OriginSearchBar onCancel={() => setToggled(false)} /> */}
 
-      <View style={_style.separator} />
+      {/* <View style={_style.separator} /> */}
 
       <DestinationSearchBar />
 
-      <View style={_style.connector} />
+      {/* <View style={_style.connector} /> */}
     </FadeInView>
   );
 };
 
 const _style = StyleSheet.create({
+  container:{
+    width: '80%'
+  },
   separator: {
-    height: 15
+    height: 20
   },
   connector: {
     position: "absolute",
-    top:20,
+    top: 30,
     left: 26.8,
     width: 1,
     height: 75,

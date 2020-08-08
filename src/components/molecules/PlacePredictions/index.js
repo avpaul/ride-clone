@@ -44,14 +44,14 @@ const PlacePredictions = ({
   };
 
   const handleDestination = async destinationAddress => {
-    if (type === DESTINATION) {
+    // if (type === DESTINATION) {
       const destinationRoute = await guideService.getRouteWithDestinationNearbyPoint(
         destinationAddress,
         currentLocation
       );
 
       setDestinationRoute(destinationRoute)(dispatch);
-    }
+    // }
   };
 
   return (
@@ -60,14 +60,15 @@ const PlacePredictions = ({
       showsVerticalScrollIndicator={false}
       style={style}
     >
-      {predictions.map(({ description }, index) => (
+      {predictions.map((item, index) => (
         <TouchableOpacity
           underlayColor={lightDark}
           key={index}
-          onPress={() => handleSelection(index)}
+          // onPress={() => handleSelection(index)}
+          onPress={() => handleDestination(item.description)}
         >
           <View style={_style.suggestion_container}>
-            <Text style={_style.text}>{description}</Text>
+            <Text style={_style.text}>{item.description}</Text>
             <BusStopIcon width={20} height={20} />
           </View>
         </TouchableOpacity>

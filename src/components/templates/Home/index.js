@@ -14,8 +14,10 @@ const HomeTemplate = ({ toolbar, bottomNavigation, mapView, bottomSheet }) => {
       <View style={style.mapView}>{mapView}</View>
       <View style={style.toolbar}>
         {toolbar}
-        <View style={style.alert}>
-          <AlertIcon width={30} height={30}/>
+        <View>
+          <View style={style.alert}>
+            <AlertIcon width={30} height={30} />
+          </View>
         </View>
       </View>
       <View style={style.bottomNavigation}>{bottomNavigation}</View>
@@ -33,7 +35,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   toolbar: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 0,
     padding: 10,
     paddingTop: 0,
@@ -45,11 +47,11 @@ const style = StyleSheet.create({
   bottomSheet: {
     position: "absolute",
   },
-  alert:{
+  alert: {
     padding: 15,
     backgroundColor: whiteColor,
     ...box_shadow,
-  }
+  },
 });
 
 HomeTemplate.defaultProps = {

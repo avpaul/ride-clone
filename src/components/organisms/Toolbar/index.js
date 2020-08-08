@@ -36,7 +36,7 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
       {/* Shows the list of routes passing by a bus stop */}
       {false && <PointRoutes style={_style.point_routes} />}
 
-      {toggled && <ExtendedSearchBar setToggled={setToggled} />}
+      {false && <ExtendedSearchBar setToggled={setToggled} />}
 
       {true && (
         <PlacePredictions
@@ -54,10 +54,16 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
 
 const _style = {
   placePredictions: {
-    marginTop: 20
+    position: 'absolute',
+    width: '100%',
+    left: '2.5%',
+    top: 65
   },
   loader: {
-    marginTop: 10
+    position: 'absolute',
+    width: '100%',
+    left: '2.5%',
+    top: 65
   },
   point_routes: {
     marginTop: 10

@@ -13,7 +13,7 @@ class FirebaseService {
       // in case of multiple apps, check each apps name
       // to avoid Firebase App already exists error
       if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig.staging);
+        firebase.initializeApp(firebaseConfig.production);
       }
     } catch (e) {
       console.log(e);

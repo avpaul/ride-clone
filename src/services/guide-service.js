@@ -55,7 +55,7 @@ export default class GuideService {
 
   async toLatLngPoint(route) {
     const points = route.points ? await Promise.all(
-      route.points.map(key => firebaseService.getDocument("points", key))
+      route.points.map(id => firebaseService.getDocument("points", String(id)))
     ) : [];
 
     return {

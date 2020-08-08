@@ -60,10 +60,8 @@ const style = StyleSheet.create({
     alignItems: "center",
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 14,
-    paddingBottom: 14,
+    paddingVertical: 20,
     backgroundColor: "#fff",
-    borderRadius: 5,
     ...box_shadow
   },
   left_container: {

@@ -101,6 +101,7 @@ const Home = ({ navigation }) => {
   const { state: { params: { routeInfo: sentRoute } = {} } = {} } = navigation;
 
   useEffect(() => {
+    console.log({sentRoute});
     // Show selected route from all routes
     if (sentRoute) {
       handleSentMarkers(

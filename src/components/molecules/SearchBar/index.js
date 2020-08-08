@@ -23,7 +23,7 @@ import { BUS, LOCATION } from "../../../constants/searchBar";
 import MapService from "../../../services/map-service";
 import { getVehicles } from "../../../redux/actions/vehicles/vehicles";
 
-const SearchBar = ({ onPress, mapView }) => {
+const SearchBar = ({ onPress, mapView, setToggled }) => {
   const mapService = new MapService(mapView);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -81,7 +81,7 @@ const SearchBar = ({ onPress, mapView }) => {
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
-            onPress={handleTypeChange}
+            // onPress={handleTypeChange}
           >
             <LocationToggleIcon width={30} height={30} />
           </TouchableHighlight>
@@ -101,11 +101,13 @@ const SearchBar = ({ onPress, mapView }) => {
           ref={searchInputRef}
           style={style.search_input}
           placeholderTextColor={lightDark}
-          placeholder={SEARCH_PLACEHOLDER(typeToggled)}
+          // placeholder={SEARCH_PLACEHOLDER(typeToggled)}
+          placeholder="Where to ?"
           value={searchValue}
           keyboardType={typeToggled === BUS ? "numeric" : null}
           returnKeyType="done"
           maxLength={100}
+          // onTouchStart={() => setToggled(true)}
           onChangeText={handleSearchChange}
         />
       </View>

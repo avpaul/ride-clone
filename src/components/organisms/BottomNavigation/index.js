@@ -12,7 +12,11 @@ import {
   clearSelectedPointRoute,
 } from "../../../redux/actions/routes";
 import { clearAutocompletePredictions } from "../../../redux/actions/places/autocompletePlaces";
-import { cancelRoutePreview, showBottomSheet } from "../../../redux/actions/navigation";
+import {
+  cancelRoutePreview,
+  showBottomSheet,
+  showBusesSheet,
+} from "../../../redux/actions/navigation";
 
 import ArrowUpIcon from "../../../../assets/icons/arrow-up";
 
@@ -33,11 +37,11 @@ const _styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  arrow:{
-    paddingVertical:5,
+  arrow: {
+    paddingVertical: 5,
     paddingHorizontal: 40,
-    backgroundColor: whiteColor
-  }
+    backgroundColor: whiteColor,
+  },
 });
 
 const BottomNavigation = ({ navigationHandler }) => {
@@ -57,7 +61,6 @@ const BottomNavigation = ({ navigationHandler }) => {
     clearAutocompletePredictions()(dispatch);
     cancelRoutePreview()(dispatch);
   };
-
 
   return (
     <>
@@ -86,7 +89,13 @@ const BottomNavigation = ({ navigationHandler }) => {
           />
         </View>
       </LinearGradient>
-      <TouchableOpacity style={_styles.bottomSheet} onPress={() => showBottomSheet()(dispatch)}>
+      <TouchableOpacity
+        style={_styles.bottomSheet}
+        onPress={() => {
+          showBottomSheet()(dispatch);
+          showBusesSheet()(dispatch);
+        }}
+      >
         <View style={_styles.arrow}>
           <ArrowUpIcon width={20} height={20} />
         </View>

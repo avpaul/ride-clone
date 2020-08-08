@@ -32,7 +32,7 @@ export const getPointRoutes = (id, { lat, lon, distance }) => async (dispatch) =
       type: LOAD_POINT_ROUTES_START,
     });
 
-    const foundRoutes = await guideService.getPointRoutes({ key: id });
+    const foundRoutes = await guideService.getPointRoutes({ id });
     const pointAdress = await placesService.getPlaceAddress({
       latitude: lat,
       longitude: lon,

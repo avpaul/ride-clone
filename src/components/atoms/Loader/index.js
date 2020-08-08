@@ -19,7 +19,6 @@ const _style = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
     backgroundColor: whiteColor,
-    borderRadius: 5,
     ...box_shadow
   },
   message: {

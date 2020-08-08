@@ -6,9 +6,10 @@ const RouteOrganism = ({ pressHandler, routeInfo, stations }) => {
     <ListItem
       {...{
         headerLeft: routeInfo.id,
-        headerRight: `${stations[0]} - ${stations[1]}`,
+        headerRight: stations,
         itemBold: `${routeInfo.price} RWF`,
-        renderTitle: false,
+        itemTitle: 'Trip price',
+        renderTitle: true,
         isBus: true,
         pressHandler
       }}

@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import BusStop from "../../../assets/icons/bus-stop";
 import RightArrow from "../../../../assets/icons/arrow_right";
 import Bus from "../../../../assets/icons/bus-blue";
+import { whiteColor } from "../../../styles/colors";
 
 
 const colors = {
@@ -65,7 +66,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e8e8e8',
     paddingBottom: 15,
     marginBottom: 10,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    borderColor: whiteColor
   },
   headerWrapper: {
     flexDirection: "row",

@@ -21,6 +21,8 @@ const _styles = StyleSheet.create({
     margin: 20,
   },
   safe_area: {
+    height: '100%',
+    paddingBottom: 20,
     backgroundColor: "#000",
   },
 });

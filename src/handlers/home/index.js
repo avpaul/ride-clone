@@ -19,6 +19,7 @@ import { previewRoute } from "../../redux/actions/navigation";
 import formatDistance from "../../helpers/formatDistance";
 import distanceToFootTime from "../../helpers/distanceToFootTime";
 import ViewBusBadge from "../../components/atoms/ViewBusBadge";
+import ABDistance from "../../helpers/ABDistance";
 
 const guideService = new GuideService();
 
@@ -89,11 +90,16 @@ export const handleBusPressed = async (
   setBusBadge,
   nearByPoints
 ) => {
+
   setBusBadge([
     <ViewBusBadge
       key="1"
       coordinate={{ latitude, longitude }}
-      distance={`${distanceToFootTime(formatDistance(distance), nearByPoints[0])} away`}
+      distance={`${distanceToFootTime(
+        formatDistance(
+          Math.abs(distance - nearByPoints[0].props.distance)
+        )
+      )} away`}
       id={id}
     />,
   ]);
@@ -177,7 +183,8 @@ export const handleSentMarkers = async (
   mapView
 ) => {
   if (!sentRoute) return setSelectedRouteMarkers([]);
-  const route = await guideService.toLatLngPoint(sentRoute);
+  const isFormatted = typeof sentRoute.points[0] === 'object' ? true : false;
+  const route = isFormatted ? sentRoute : await guideService.toLatLngPoint(sentRoute);
 
   const markers = route.points.map(({ latitude, longitude }, index) =>
     PointService.point({

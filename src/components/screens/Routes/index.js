@@ -47,7 +47,7 @@ const Routes = ({ navigation }) => {
         key={routeInfo.key}
         routeInfo={routeInfo}
         pressHandler={() => navigateToRoute(routeInfo)}
-        stations={[routeInfo.name.split("-")[0], routeInfo.name.split("-")[1]]}
+        stations={routeInfo.name}
       />
     ));
   };
