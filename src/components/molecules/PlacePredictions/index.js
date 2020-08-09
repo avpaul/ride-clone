@@ -13,6 +13,12 @@ import { setDestinationRoute } from "../../../redux/actions/guide";
 import { clearAutocompletePredictions } from "../../../redux/actions/places/autocompletePlaces";
 import placesService from "../../../services/places-service";
 import MapService from "../../../services/map-service";
+import { toggleLoader } from "../../../redux/actions/loader";
+import {
+  LOADING_NEAREST_ROUTE,
+  LOADING_ROUTE,
+} from "../../../constants/loader";
+import { previewRoute } from "../../../redux/actions/navigation";
 
 const PlacePredictions = ({
   style,
@@ -20,15 +26,16 @@ const PlacePredictions = ({
   type,
   toggleSearchBar,
   mapView,
-  onSelection
+  onSelection,
 }) => {
   const dispatch = useDispatch();
   const guideService = new GuideService();
   const mapService = new MapService(mapView);
 
-  const { currentLocation: { coords: currentLocation } = {} } = useSelector(({ location }) => location);
+  const { currentLocation = {} } = useSelector(({ location }) => location);
+  const location = useSelector(({ location }) => location);
 
-  const handleSelection = async index => {
+  const handleSelection = async (index) => {
     clearAutocompletePredictions()(dispatch);
 
     onSelection();
@@ -43,14 +50,23 @@ const PlacePredictions = ({
     // handleDestination(address); TOBE: Used in the future to get route suggestions
   };
 
-  const handleDestination = async destinationAddress => {
+  const handleDestination = async (destinationAddress) => {
     // if (type === DESTINATION) {
-      const destinationRoute = await guideService.getRouteWithDestinationNearbyPoint(
-        destinationAddress,
-        currentLocation
-      );
+    toggleLoader({ message: LOADING_ROUTE, loading: true })(dispatch);
+    clearAutocompletePredictions()(dispatch);
 
-      setDestinationRoute(destinationRoute)(dispatch);
+    const addressLocation = await placesService.getPlaceLatLng(address);
+    setSearchSelection({ destination: destinationAddress, addressLocation })(dispatch);
+
+    const destinationRoute = await guideService.getRouteWithDestinationNearbyPoint(
+      destinationAddress,
+      currentLocation
+    );
+
+    toggleLoader({ message: LOADING_ROUTE, loading: false })(dispatch);
+
+    setDestinationRoute(destinationRoute)(dispatch);
+    previewRoute()(dispatch);
     // }
   };
 
@@ -89,20 +105,20 @@ const _style = StyleSheet.create({
     marginBottom: 6,
     backgroundColor: "#fff",
     borderRadius: 5,
-    ...box_shadow
+    ...box_shadow,
   },
   text: {
     maxWidth: "85%",
     fontSize: 16,
-    color: lightDark
-  }
+    color: lightDark,
+  },
 });
 
 PlacePredictions.defaultProps = {
   style: null,
   predictions: [],
   type: DESTINATION,
-  onSelection: () => null
+  onSelection: () => null,
 };
 
 PlacePredictions.propTypes = {
@@ -111,7 +127,7 @@ PlacePredictions.propTypes = {
   type: PropTypes.string,
   toggleSearchBar: PropTypes.func.isRequired,
   mapView: PropTypes.instanceOf(Object).isRequired,
-  onSelection: PropTypes.func
+  onSelection: PropTypes.func,
 };
 
 export default PlacePredictions;

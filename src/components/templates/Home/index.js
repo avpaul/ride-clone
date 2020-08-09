@@ -14,11 +14,11 @@ const HomeTemplate = ({ toolbar, bottomNavigation, mapView, bottomSheet }) => {
       <View style={style.mapView}>{mapView}</View>
       <View style={style.toolbar}>
         {toolbar}
-        <View>
+        {/* <View>
           <View style={style.alert}>
             <AlertIcon width={30} height={30} />
           </View>
-        </View>
+        </View> */}
       </View>
       <View style={style.bottomNavigation}>{bottomNavigation}</View>
       <View style={style.bottomSheet}>{bottomSheet}</View>
@@ -49,8 +49,8 @@ const style = StyleSheet.create({
   },
   alert: {
     padding: 15,
-    backgroundColor: whiteColor,
-    ...box_shadow,
+    // backgroundColor: whiteColor,
+    // ...box_shadow,
   },
 });
 

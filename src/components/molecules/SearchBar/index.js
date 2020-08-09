@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableHighlight,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import LocationToggleIcon from "../../../assets/icons/location-toggle";
 import BusToggleIcon from "../../../assets/icons/bus-toggle";
@@ -22,6 +22,7 @@ import placesService from "../../../services/places-service";
 import { BUS, LOCATION } from "../../../constants/searchBar";
 import MapService from "../../../services/map-service";
 import { getVehicles } from "../../../redux/actions/vehicles/vehicles";
+import AlertIcon from "../../../../assets/icons/alert";
 
 const SearchBar = ({ onPress, mapView, setToggled }) => {
   const mapService = new MapService(mapView);
@@ -34,8 +35,8 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
 
   const { loading: loadingVehicles } = useSelector(({ vehicles }) => vehicles);
 
-  const [debounceCallback] = useDebouncedCallback(query => {
-    placesService.getPlaceAutocomplete(query).then(data => {
+  const [debounceCallback] = useDebouncedCallback((query) => {
+    placesService.getPlaceAutocomplete(query).then((data) => {
       setPredictions(data);
       setLoading(false);
     });
@@ -48,19 +49,25 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
       setAutocompletePredictions({ predictions, type: DESTINATION })(dispatch);
   }, [predictions]);
 
-  const handleLocationSearch = query => {
+  const handleLocationSearch = (query) => {
     query && query.length > 0 && setLoading(true);
-    if (query) debounceCallback(query);
+    // if (query) debounceCallback(query);
+    placesService.getPlaceAutocomplete(query).then((data) => {
+      setPredictions(data);
+      setLoading(false);
+    });
   };
 
-  const handleVehicleSearch = query => {
+  const handleVehicleSearch = (query) => {
     getVehicles(query)(dispatch);
   };
 
-  const handleSearchChange = query => {
+  const handleSearchChange = (query) => {
     setSearchValue(query);
-    if (typeToggled === LOCATION) return handleLocationSearch(query);
-    if (typeToggled === BUS) handleVehicleSearch(query);
+    // if (typeToggled === LOCATION) return handleLocationSearch(query);
+    // if (typeToggled === BUS) handleVehicleSearch(query);
+
+    return handleLocationSearch(query);
   };
 
   const handleTypeChange = () => {
@@ -77,7 +84,7 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
   return (
     <FadeInView style={style.container}>
       <View style={style.wrapper}>
-        {typeToggled === LOCATION && (
+        {/* {typeToggled === LOCATION && (
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
@@ -85,9 +92,9 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
           >
             <LocationToggleIcon width={30} height={30} />
           </TouchableHighlight>
-        )}
+        )} */}
 
-        {typeToggled === BUS && (
+        {/* {typeToggled === BUS && (
           <TouchableHighlight
             style={style.option_toggler}
             underlayColor={touchableLight}
@@ -95,7 +102,7 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
           >
             <BusToggleIcon width={30} height={30} />
           </TouchableHighlight>
-        )}
+        )} */}
 
         <TextInput
           ref={searchInputRef}
@@ -110,12 +117,20 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
           // onTouchStart={() => setToggled(true)}
           onChangeText={handleSearchChange}
         />
+
+        {loadingVehicles && <ActivityIndicator />}
+        {loading && <ActivityIndicator style={style.loader}/>}
+
+        <TouchableHighlight
+          style={style.option_toggler}
+          underlayColor={touchableLight}
+          onPress={handleTypeChange}
+        >
+          <AlertIcon width={30} height={30} />
+        </TouchableHighlight>
       </View>
 
-      {loadingVehicles && <ActivityIndicator />}
-      {loading && <ActivityIndicator />}
-
-      <View/>
+      <View />
     </FadeInView>
   );
 };
@@ -128,32 +143,36 @@ const style = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     backgroundColor: "#fff",
-    ...box_shadow
+    ...box_shadow,
   },
   wrapper: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    maxWidth: "80%"
   },
   search_input: {
-    minWidth: "70%",
+    minWidth: "80%",
     maxWidth: "100%",
     marginLeft: 20,
-    fontSize: INPUT_FONT_SIZE
+    fontSize: INPUT_FONT_SIZE,
   },
   option_toggler: {
     paddingTop: 15,
     paddingBottom: 12,
-    paddingRight: 15,
-    borderRightWidth: 1,
-    borderRightColor: touchableLight
+    paddingLeft: 15,
+    borderLeftWidth: 1,
+    borderLeftColor: "#e0e0e0",
+  },
+  loader:{
+    position: 'absolute',
+    right: '20%',
   }
 });
 
 SearchBar.defaultProps = {};
 
 SearchBar.propTypes = {
-  mapView: PropTypes.instanceOf(Object).isRequired
+  mapView: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default SearchBar;

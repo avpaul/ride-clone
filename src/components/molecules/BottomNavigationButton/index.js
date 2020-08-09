@@ -37,7 +37,7 @@ const BottomNavigationButton = ({pressHandler, Icon, title, label, size = 32}) =
             <TouchableHighlight style={styles.button} onPress={pressHandler} title={title} underlayColor={touchableLight}>
                 <Icon width={size} height={size}/>
             </TouchableHighlight>
-            <Text style={styles.buttonLabel}>{label}</Text>
+            {/* <Text style={styles.buttonLabel}>{label}</Text> */}
         </View>
     )
 };

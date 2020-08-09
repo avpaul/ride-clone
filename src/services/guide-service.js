@@ -23,29 +23,12 @@ export default class GuideService {
     destinationAddress,
     currentLocation
   ) {
+    
     const destination = await placesService.getPlaceLatLng(destinationAddress);
 
-    const { key: originKey } = await this.getClosestPointToDestination(
+    const { data : route} = await this.axios.post(MATCHED_ROUTES, {
+      currentLocation,
       destination
-    ); // Should return an array of points for more suggestions
-
-    const { key: destinationKey } = await this.getClosestPointToDestination(
-      currentLocation
-    ); // Should return an array of points for more suggestions
-
-    // GET ALL ROUTES FROM DESTINATION AND ROUTES FROM ORIGIN
-    // const originRoute = await this.getPointRoutes(nearbyOriginPoint);
-    // const destinationRoute = await this.getPointRoutes(
-    //   nearbyDestinationPoint
-    // );
-
-    const {
-      data: {
-        routes: [route = {}]
-      }
-    } = await this.axios.post(MATCHED_ROUTES, {
-      originKey,
-      destinationKey
     }); // BEST MATCH
 
     const result = await this.toLatLngPoint(route);
@@ -65,10 +48,11 @@ export default class GuideService {
   }
 
   async getPointRoutes(route) {
+    console.log(route)
     const nearbyRoutes = await firebaseService.getCollection("routes", {
       field: "points",
       sign: "array-contains",
-      value: route.key
+      value: Number(route.id)
     });
 
     const nearbyRoutePointsLatLng = nearbyRoutes.map(async route =>

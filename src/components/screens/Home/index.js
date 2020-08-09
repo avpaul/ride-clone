@@ -22,6 +22,7 @@ import {
   handleSetVehicles,
   handleSentMarkers,
   handleBusPressed,
+  handleSetDestinationRoute,
 } from "../../../handlers/home";
 import { GUIDE_FOR_MARKER_PRESS } from "../../../constants/notification";
 import { hideToast } from "../../../redux/actions/toast";
@@ -48,20 +49,41 @@ const Home = ({ navigation }) => {
   const [unFocusedToolbar, setUnFocusedToolbar] = useState(false);
   const [nearByPoints, setNearByPoints] = useState([]);
   const [destinationLocation, setDestinationLocation] = useState();
+  const [destinationLocationRoute, setDestinationLocationRoute] = useState([]);
 
   const { currentLocation } = useSelector(({ location }) => location);
   const selectedPointRoute = useSelector(
     ({ routes: { selectedPointRoute } }) => selectedPointRoute
   );
+  const { addressLocation = {} } = useSelector(({ search }) => search);
 
   const { data: vehicles } = useSelector(({ vehicles }) => vehicles);
   const { routePreview } = useSelector(({ navigation }) => navigation);
+  const { destinationRoute } = useSelector(({ guide }) => guide);
+
   useEffect(() => {
     if (!routePreview) {
       setSelectedRouteMarkers([]);
       setRoutes([]);
+      setDestinationLocation();
     }
   }, [routePreview]);
+
+  useEffect(() => {
+    if (destinationRoute.points) {
+      handleSetDestinationRoute(
+        destinationRoute,
+        setRoutes,
+        routeService,
+        setSelectedRouteMarkers,
+        mapView,
+        setNearestPointsRoutes,
+        currentLocation,
+        setDestinationLocationRoute,
+        addressLocation
+      );
+    }
+  }, [destinationRoute]);
 
   //Show bottom sheet on start
   useEffect(() => {
@@ -101,7 +123,6 @@ const Home = ({ navigation }) => {
   const { state: { params: { routeInfo: sentRoute } = {} } = {} } = navigation;
 
   useEffect(() => {
-    console.log({sentRoute});
     // Show selected route from all routes
     if (sentRoute) {
       handleSentMarkers(
@@ -110,7 +131,7 @@ const Home = ({ navigation }) => {
         setRoutes,
         routeService,
         dispatch,
-        mapView
+        mapView,
       );
     }
   }, [sentRoute, mapView]);
@@ -196,12 +217,6 @@ const Home = ({ navigation }) => {
           destinationAddress
         );
         setDestinationLocation(<Marker coordinate={destination} />);
-        setNearByPoints(
-          await PointService.getNearbyPoints(
-            { onPress: onPointPressed },
-            destination
-          )
-        );
       }
     };
     showDestinationMarker();
@@ -225,7 +240,7 @@ const Home = ({ navigation }) => {
                 ...selectedRouteMarkers,
                 ...vehiclesMarkers,
               ]}
-              routes={[...routes, ...nearestPointsRoutes]}
+              routes={[...routes, ...nearestPointsRoutes, ...destinationLocationRoute]}
             />
           }
           toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}

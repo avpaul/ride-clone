@@ -58,16 +58,18 @@ class PlacesService {
     if (!address) return;
 
     try {
-      const {
-        data: {
-          results: [{ geometry: { location: { lat, lng } } = {} }] = [{}]
-        }
-      } = await this.axios.get(PLACE_GOECODE_URL, {
+      const result = await this.axios.get(PLACE_GOECODE_URL, {
         params: {
           address,
           key: GOOGLE_API_KEY
         }
       });
+
+      const {
+        data: {
+          results: [{ geometry: { location: { lat, lng } } = {} }] = [{}]
+        }
+      } = result;
 
       return {
         latitude: lat,

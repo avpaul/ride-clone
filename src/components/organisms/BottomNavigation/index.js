@@ -19,12 +19,13 @@ import {
 } from "../../../redux/actions/navigation";
 
 import ArrowUpIcon from "../../../../assets/icons/arrow-up";
+import { clearDestinationRoute } from "../../../redux/actions/guide";
 
 const _styles = StyleSheet.create({
   wrapper: {
     display: "flex",
     flexDirection: "row",
-    paddingBottom: 60,
+    paddingBottom: 70,
     paddingLeft: width(4),
     paddingRight: width(4),
   },
@@ -60,11 +61,12 @@ const BottomNavigation = ({ navigationHandler }) => {
     clearSelectedPointRoute()(dispatch);
     clearAutocompletePredictions()(dispatch);
     cancelRoutePreview()(dispatch);
+    clearDestinationRoute()(dispatch);
   };
 
   return (
     <>
-      <LinearGradient colors={[transparent, mapColor, mapColor]}>
+      {/* <LinearGradient colors={[transparent, mapColor, mapColor]}> */}
         <View
           style={{
             ..._styles.wrapper,
@@ -88,7 +90,7 @@ const BottomNavigation = ({ navigationHandler }) => {
             label={"Routes"}
           />
         </View>
-      </LinearGradient>
+      {/* </LinearGradient> */}
       <TouchableOpacity
         style={_styles.bottomSheet}
         onPress={() => {

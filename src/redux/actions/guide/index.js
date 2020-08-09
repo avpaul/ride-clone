@@ -1,7 +1,15 @@
-import { SET_DESTINATION_ROUTE } from "../../action-types/guide";
+import {
+  SET_DESTINATION_ROUTE,
+  CLEAR_DESTINATION_ROUTE,
+} from "../../action-types/guide";
 
-export const setDestinationRoute = payload => dispatch =>
+export const setDestinationRoute = (payload) => (dispatch) =>
   dispatch({
     type: SET_DESTINATION_ROUTE,
-    payload
+    payload,
+  });
+
+export const clearDestinationRoute = () => (dispatch) =>
+  dispatch({
+    type: CLEAR_DESTINATION_ROUTE,
   });

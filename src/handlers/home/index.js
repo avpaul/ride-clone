@@ -13,7 +13,7 @@ import { Marker } from "react-native-maps";
 import PointService from "../../services/point-service";
 import MapService from "../../services/map-service";
 import VehicleService from "../../services/vehicle-service";
-import { PARKING } from "../../constants/point";
+import { PARKING, ACTIVE } from "../../constants/point";
 import { EDGEPADDING } from "../../constants/map";
 import { previewRoute } from "../../redux/actions/navigation";
 import formatDistance from "../../helpers/formatDistance";
@@ -42,6 +42,79 @@ export const handleSetSelectedPointRoute = (
       type: "secondary",
     }),
   ]);
+};
+
+export const handleSetDestinationRoute = (
+  destinationRoute,
+  setRoutes,
+  routeService,
+  setSelectedRouteMarkers,
+  mapView,
+  setNearestPointsRoutes,
+  currentLocation,
+  setDestinationLocationRoute,
+  addressLocation
+) => {
+  const route = destinationRoute;
+  if (destinationRoute.points.length >= 25) {
+    route.points.splice(
+      destinationRoute.points.length / 2,
+      destinationRoute.points.length - 25
+    );
+  }
+
+  const {
+    points: [origin, ...waypoints],
+    name,
+  } = route;
+  setRoutes([
+    routeService.addRoute({
+      id: name,
+      origin,
+      waypoints,
+      destination: waypoints.pop() || {},
+      type: "secondary",
+    }),
+  ]);
+
+  const destination = {
+    latitude: route.points[0].latitude,
+    longitude: route.points[0].longitude,
+  };
+
+  setNearestPointsRoutes(
+    routeService.addRoute({
+      origin: {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+      },
+      destination,
+      id: route.id,
+    })
+  );
+
+  setDestinationLocationRoute(
+    routeService.addRoute({
+      origin: route.points.pop(),
+      destination: addressLocation,
+      id: route.id,
+    })
+  );
+
+  const markers = route.points
+    .filter((_i, index) => index === route.points.length - 1) // Only display the origin and destination markers
+    .map(({ latitude, longitude }, index) =>
+      PointService.point({
+        id: index,
+        latitude,
+        longitude,
+        type: ACTIVE,
+      })
+    );
+  setSelectedRouteMarkers(markers);
+  mapView.current.fitToCoordinates(route.points, {
+    edgePadding: EDGEPADDING,
+  });
 };
 
 export const directionsToNearestPoints = (
@@ -90,15 +163,12 @@ export const handleBusPressed = async (
   setBusBadge,
   nearByPoints
 ) => {
-
   setBusBadge([
     <ViewBusBadge
       key="1"
       coordinate={{ latitude, longitude }}
       distance={`${distanceToFootTime(
-        formatDistance(
-          Math.abs(distance - nearByPoints[0].props.distance)
-        )
+        formatDistance(Math.abs(distance - nearByPoints[0].props.distance))
       )} away`}
       id={id}
     />,
@@ -183,8 +253,10 @@ export const handleSentMarkers = async (
   mapView
 ) => {
   if (!sentRoute) return setSelectedRouteMarkers([]);
-  const isFormatted = typeof sentRoute.points[0] === 'object' ? true : false;
-  const route = isFormatted ? sentRoute : await guideService.toLatLngPoint(sentRoute);
+  const isFormatted = typeof sentRoute.points[0] === "object" ? true : false;
+  const route = isFormatted
+    ? sentRoute
+    : await guideService.toLatLngPoint(sentRoute);
 
   const markers = route.points.map(({ latitude, longitude }, index) =>
     PointService.point({

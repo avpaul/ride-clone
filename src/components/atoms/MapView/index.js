@@ -43,7 +43,7 @@ function MapViewWrapper({
       customMapStyle={CUSTOM_MAP_STYLE}
       showsUserLocation={true}
       showsMyLocationButton={true}
-      mapPadding={{ top: 0, right: 10, bottom: 150, left: 0 }}
+      mapPadding={{ top: 0, right: 10, bottom: 130, left: 0 }}
       initialRegion={initialRegion}
       onMapReady={mapReady}
       {...props}

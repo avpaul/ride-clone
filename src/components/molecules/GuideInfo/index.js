@@ -14,8 +14,8 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
   useEffect(() => {
     placesService
       .getPlaceAddress({
-        latitude: busStop[0].props.latitude,
-        longitude: busStop[0].props.longitude,
+        latitude: busStop[0]?.props?.latitude,
+        longitude: busStop[0]?.props?.longitude,
       })
       .then((adress) => {
         setPointAdress(adress);
@@ -32,7 +32,7 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
             itemTitle: `${pointAdress ? pointAdress : "Loading.."}`,
             itemSubTitle: busStop[0]
               ? `${distanceToFootTime(
-                  formatDistance(busStop[0].props.distance)
+                  formatDistance(busStop[0]?.props?.distance)
                 )} away from your location`
               : "",
             renderTitle: true,
@@ -49,14 +49,14 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
               {...{
                 headerRight: bus ? `${distanceToFootTime(
                   formatDistance(
-                    Math.abs(bus.props.distance - busStop[0].props.distance)
+                    Math.abs(bus.props.distance - busStop[0]?.props?.distance)
                   )
                 )} away` : '',
                 itemTitle: bus ? bus.props.route : '',
                 itemSubTitle: bus
                   ? `Reaching your nearest bus stop in ${distanceToFootTime(
                       formatDistance(
-                        Math.abs(bus.props.distance - busStop[0].props.distance)
+                        Math.abs(bus.props.distance - busStop[0]?.props?.distance)
                       )
                     )}`
                   : "",
