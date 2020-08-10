@@ -26,7 +26,7 @@ export default class PointService {
       sortedPoints &&
       Array.from(new Set(sortedPoints.map(JSON.stringify)))
         .map(JSON.parse)
-        .slice(0, 10)
+        .slice(0, 5)
         .map((_props, index) => this.point({ ..._props, ...props, index }))
     );
   }

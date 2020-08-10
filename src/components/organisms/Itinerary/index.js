@@ -7,6 +7,7 @@ import BusArrivalAtom from '../../atoms/BusArrival';
 import ChevronIcon from '../../../../assets/icons/chevron.svg';
 import ManWalkingIcon from '../../../../assets/icons/man-walking.svg';
 import { whiteColor } from '../../../styles/colors';
+import { box_shadow } from '../../../styles';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     backgroundColor: whiteColor,
-    borderRadius: 8
+    ...box_shadow,
   },
   iconWrapper: {
     padding: 0

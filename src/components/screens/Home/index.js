@@ -32,6 +32,8 @@ import {
   showBusesSheet,
   hideBusesSheet,
 } from "../../../redux/actions/navigation";
+import LocationService from "../../../services/location-service";
+import { EDGEPADDING } from "../../../constants/map";
 
 const Home = ({ navigation }) => {
   const routeService = new RouteService();
@@ -66,6 +68,7 @@ const Home = ({ navigation }) => {
       setSelectedRouteMarkers([]);
       setRoutes([]);
       setDestinationLocation();
+      setDestinationLocationRoute([]);
     }
   }, [routePreview]);
 
@@ -131,7 +134,7 @@ const Home = ({ navigation }) => {
         setRoutes,
         routeService,
         dispatch,
-        mapView,
+        mapView
       );
     }
   }, [sentRoute, mapView]);
@@ -217,6 +220,9 @@ const Home = ({ navigation }) => {
           destinationAddress
         );
         setDestinationLocation(<Marker coordinate={destination} />);
+        mapView.current.fitToCoordinates([currentLocation, destination], {
+          edgePadding: { top: 40, bottom: 40, left: 40, right: 40 },
+        });
       }
     };
     showDestinationMarker();
@@ -240,7 +246,11 @@ const Home = ({ navigation }) => {
                 ...selectedRouteMarkers,
                 ...vehiclesMarkers,
               ]}
-              routes={[...routes, ...nearestPointsRoutes, ...destinationLocationRoute]}
+              routes={[
+                ...routes,
+                ...nearestPointsRoutes,
+                destinationLocationRoute,
+              ]}
             />
           }
           toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}

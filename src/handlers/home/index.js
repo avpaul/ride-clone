@@ -102,7 +102,7 @@ export const handleSetDestinationRoute = (
   );
 
   const markers = route.points
-    .filter((_i, index) => index === route.points.length - 1) // Only display the origin and destination markers
+    // .filter((_i, index) => index === route.points.length - 1) // Only display the origin and destination markers
     .map(({ latitude, longitude }, index) =>
       PointService.point({
         id: index,
@@ -112,7 +112,7 @@ export const handleSetDestinationRoute = (
       })
     );
   setSelectedRouteMarkers(markers);
-  mapView.current.fitToCoordinates(route.points, {
+  mapView.current.fitToCoordinates([currentLocation, ...route.points], {
     edgePadding: EDGEPADDING,
   });
 };

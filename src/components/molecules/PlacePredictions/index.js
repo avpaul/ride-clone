@@ -55,8 +55,8 @@ const PlacePredictions = ({
     toggleLoader({ message: LOADING_ROUTE, loading: true })(dispatch);
     clearAutocompletePredictions()(dispatch);
 
-    const addressLocation = await placesService.getPlaceLatLng(address);
-    setSearchSelection({ destination: destinationAddress, addressLocation })(dispatch);
+    // const addressLocation = await placesService.getPlaceLatLng(address);
+    setSearchSelection({ destination: destinationAddress })(dispatch);
 
     const destinationRoute = await guideService.getRouteWithDestinationNearbyPoint(
       destinationAddress,
