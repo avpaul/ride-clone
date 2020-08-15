@@ -1,5 +1,6 @@
 import Home from "../components/screens/Home";
 import Routes from '../components/screens/Routes';
+import Report from '../components/screens/Report';
 
 export default {
   Home: {
@@ -10,6 +11,12 @@ export default {
   },
   Routes:{
     screen: Routes,
+    navigationOptions: {
+      headerShown:false
+    }
+  },
+  Report:{
+    screen: Report,
     navigationOptions: {
       headerShown:false
     }

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import LocationToggleIcon from "../../../assets/icons/location-toggle";
 import BusToggleIcon from "../../../assets/icons/bus-toggle";
-import { lightDark, touchableLight } from "../../../styles/colors";
+import { lightDark, touchableLight, primaryColor, whiteColor } from "../../../styles/colors";
 import { SEARCH_PLACEHOLDER, DESTINATION } from "../../../constants/searchBar";
 import LocationService from "../../../services/location-service";
 import { INPUT_FONT_SIZE } from "../../../constants/sizes";
@@ -24,7 +24,7 @@ import MapService from "../../../services/map-service";
 import { getVehicles } from "../../../redux/actions/vehicles/vehicles";
 import AlertIcon from "../../../../assets/icons/alert";
 
-const SearchBar = ({ onPress, mapView, setToggled }) => {
+const SearchBar = ({ onPress, mapView, setToggled, navigation }) => {
   const mapService = new MapService(mapView);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -104,6 +104,8 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
           </TouchableHighlight>
         )} */}
 
+        <View style={style.blue} />
+
         <TextInput
           ref={searchInputRef}
           style={style.search_input}
@@ -124,7 +126,7 @@ const SearchBar = ({ onPress, mapView, setToggled }) => {
         <TouchableHighlight
           style={style.option_toggler}
           underlayColor={touchableLight}
-          onPress={handleTypeChange}
+          onPress={()=> navigation.navigate("Report")}
         >
           <AlertIcon width={30} height={30} />
         </TouchableHighlight>
@@ -150,10 +152,16 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  blue:{
+    width: 10,
+    height: 10,
+    // borderRadius: 10,
+    backgroundColor: primaryColor,
+  },
   search_input: {
-    minWidth: "80%",
+    minWidth: "78%",
     maxWidth: "100%",
-    marginLeft: 20,
+    marginLeft: 15,
     fontSize: INPUT_FONT_SIZE,
   },
   option_toggler: {

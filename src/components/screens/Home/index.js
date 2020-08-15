@@ -253,7 +253,7 @@ const Home = ({ navigation }) => {
               ]}
             />
           }
-          toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} />}
+          toolbar={<Toolbar unFocused={unFocusedToolbar} mapView={mapView} navigation={navigation}/>}
           bottomNavigation={
             <BottomNavigation navigationHandler={handleNavigation} />
           }

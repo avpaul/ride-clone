@@ -8,7 +8,7 @@ import Loader from "../../atoms/Loader";
 import PointRoutes from "../../atoms/PointRoutes";
 import RouteSchedule from "../../molecules/RouteSchedule";
 
-const Toolbar = ({ unFocused, mapView, onSelection }) => {
+const Toolbar = ({ unFocused, mapView, onSelection, navigation }) => {
   const [toggled, setToggled] = useState(false);
   const {
     autocompletePredictions: { predictions, type },
@@ -30,6 +30,7 @@ const Toolbar = ({ unFocused, mapView, onSelection }) => {
         onPress={() => setToggled(true)}
         mapView={mapView}
         setToggled={setToggled}
+        navigation={navigation}
       />
 
       {loaderLoading && (

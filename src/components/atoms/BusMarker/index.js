@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Animated, StyleSheet, Easing } from "react-native";
+import { View, Animated, StyleSheet, Text } from "react-native";
 import PropTypes from "prop-types";
 import { Marker } from "react-native-maps";
-import BusImage from "../../../../assets/icons/bus-blue";
+import BusImage from "../../../../assets/icons/bus.png";
 import { useDispatch } from "react-redux";
 import {
   previewRoute,
@@ -10,7 +10,16 @@ import {
 } from "../../../redux/actions/navigation";
 import { primaryColor } from "../../../styles/colors";
 
-const Bus = ({ id, index, title, name, latitude, longitude, distance, onPress }) => {
+const Bus = ({
+  id,
+  index,
+  title,
+  name,
+  latitude,
+  longitude,
+  distance,
+  onPress,
+}) => {
   const dispatch = useDispatch();
 
   const handleOnPress = () => {
@@ -19,17 +28,19 @@ const Bus = ({ id, index, title, name, latitude, longitude, distance, onPress })
     onPress({ latitude, longitude, id, distance });
   };
 
-  useEffect(()=>{
-    if(index === 0){
-      handleOnPress();
-    }
-  }, [index]);
+  // useEffect(()=>{
+  //   if(index === 0){
+  //     handleOnPress();
+  //   }
+  // }, [index]);
 
   return (
     <Marker
       {...{
         key: id,
+        style: styles.marker,
         title,
+        image: BusImage,
         description: name,
         coordinate: { latitude, longitude },
         identifier: id,
@@ -37,10 +48,22 @@ const Bus = ({ id, index, title, name, latitude, longitude, distance, onPress })
         zIndex: !isNaN(id) && id + 1,
       }}
     >
-      <BusImage width={25} height={25}/>
+        <Text style={styles.text}>{id}</Text>
     </Marker>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 13,
+    marginTop: 3.5,
+    marginLeft: 40,
+  },
+  marker:{
+    position: 'absolute',
+    left: 30,
+  }
+});
 
 Bus.defaultProps = {
   title: "",

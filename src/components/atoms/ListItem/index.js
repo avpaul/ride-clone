@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import BusStop from "../../../assets/icons/bus-stop";
 import RightArrow from "../../../../assets/icons/arrow_right";
-import Bus from "../../../../assets/icons/bus-blue";
+import Bus from "../../../../assets/icons/black-bus";
 import { whiteColor } from "../../../styles/colors";
 
 

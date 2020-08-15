@@ -29,7 +29,7 @@ const styles = {
   toolbarTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: yellowColor,
+    color: whiteColor,
   },
   backButton: {
     marginRight: 12,
