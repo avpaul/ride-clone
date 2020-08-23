@@ -48,7 +48,6 @@ export default class GuideService {
   }
 
   async getPointRoutes(route) {
-    console.log(route)
     const nearbyRoutes = await firebaseService.getCollection("routes", {
       field: "points",
       sign: "array-contains",

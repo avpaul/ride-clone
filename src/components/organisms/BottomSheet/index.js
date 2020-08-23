@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
 import RNBottomSheet from "react-native-raw-bottom-sheet";
 import BottomSheetHeader from "../../atoms/BottomSheetHeader";
 import BottomSheetContent from "../../molecules/BottomSheetContent";
@@ -33,7 +32,7 @@ const BottomSheet = ({ navigation, busStop, buses }) => {
       customStyles={style}
       onClose={handleClose}
       minClosingHeight={0}
-      height={340}
+      height={370}
       closeOnDragDown
     >
       <BottomSheetHeader />

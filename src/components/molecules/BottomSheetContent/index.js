@@ -11,7 +11,7 @@ const BottomSheetContent = ({ navigation, busStop, buses }) => {
     <View style={style.container}>
       {!showBusesSheet && <BusStopInfo navigation={navigation} />}
       {showBusesSheet && (
-        <GuideInfo navigation={navigation} busStop={busStop} buses={buses} />
+         <GuideInfo navigation={navigation} busStop={busStop} buses={buses} />
       )}
     </View>
   );
@@ -20,7 +20,6 @@ const BottomSheetContent = ({ navigation, busStop, buses }) => {
 const style = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingRight: 20,
     backgroundColor: whiteColor,
   },
 });

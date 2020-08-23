@@ -25,21 +25,19 @@ const _styles = StyleSheet.create({
   wrapper: {
     display: "flex",
     flexDirection: "row",
-    paddingBottom: 70,
+    paddingBottom: 20,
     paddingLeft: width(4),
     paddingRight: width(4),
   },
   bottomSheet: {
-    position: "absolute",
-    bottom: 20,
-    width: 100,
     backgroundColor: whiteColor,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
   },
   arrow: {
-    paddingVertical: 5,
+    paddingVertical: 10,
+    marginBottom:15,
     paddingHorizontal: 40,
     backgroundColor: whiteColor,
   },
@@ -65,7 +63,7 @@ const BottomNavigation = ({ navigationHandler }) => {
   };
 
   return (
-    <>
+    <View >
       {/* <LinearGradient colors={[transparent, mapColor, mapColor]}> */}
         <View
           style={{
@@ -102,7 +100,7 @@ const BottomNavigation = ({ navigationHandler }) => {
           <ArrowUpIcon width={20} height={20} />
         </View>
       </TouchableOpacity>
-    </>
+    </View>
   );
 };
 

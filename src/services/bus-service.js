@@ -36,20 +36,31 @@ export default class BusService {
   // }
 
   static async getNearbyBuses(props, currentLocation) {
-    const buses = await firebaseService.getCollection("vehicles");
-    const sortedBuses = currentLocation
-      ? sortByDistance(currentLocation, buses, {
-          yName: "latitude",
-          xName: "longitude",
-        })
-      : [];
+    return new Promise((resolve, reject)=>{
+      firebaseService.database
+      .collection("vehicles")
+      .onSnapshot((snapshot) => {
+        const buses = [];
+        snapshot.forEach((doc) => buses.push({ ...doc.data(), key: doc.id }));
 
-    return (
-      sortedBuses &&
-      Array.from(new Set(sortedBuses.map(JSON.stringify)))
-        .map(JSON.parse)
-        .slice(0, 5)
-        .map((_props, index) => this.bus({ ..._props, ...props, index }))
-    );
+        const sortedBuses = currentLocation
+          ? sortByDistance(currentLocation, buses, {
+              yName: "latitude",
+              xName: "longitude",
+            })
+          : [];
+
+
+        return resolve(
+          sortedBuses &&
+          Array.from(new Set(sortedBuses.map(JSON.stringify)))
+            .map(JSON.parse)
+            .slice(0, 5)
+            .map((_props, index) => this.bus({ ..._props, ...props, index }))
+        );
+      });
+    })
   }
+
+
 }

@@ -66,7 +66,7 @@ const Report = ({ navigation }) => {
         <View style={styles.wrapper}>
           <View
             style={{
-              marginTop: 16,
+              marginTop: 40,
               ...styles.toolbarHeaderWrapper,
             }}
           >

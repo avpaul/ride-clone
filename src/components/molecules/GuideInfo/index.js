@@ -7,6 +7,7 @@ import ListItem from "../../atoms/ListItem";
 import placesService from "../../../services/places-service";
 import distanceToFootTime from "../../../helpers/distanceToFootTime";
 import formatDistance from "../../../helpers/formatDistance";
+import BusCard from "../../atoms/BusCard";
 
 const GuideInfo = ({ navigation, busStop, buses }) => {
   const [pointAdress, setPointAdress] = useState();
@@ -23,54 +24,70 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
   }, [busStop]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={style.scrollView}>
-      <View style={style.container}>
-        <Text style={style.title}>Wait for your next bus at:</Text>
+    <View>
+      <ScrollView showsVerticalScrollIndicator={false} style={style.scrollView}>
+        <View style={style.container}>
+          <View style={{ paddingLeft: 20 }}>
+            <Text style={style.title}>Wait for your next bus at:</Text>
 
-        <ListItem
-          {...{
-            itemTitle: `${pointAdress ? pointAdress : "Loading.."}`,
-            itemSubTitle: busStop[0]
-              ? `${distanceToFootTime(
-                  formatDistance(busStop[0]?.props?.distance)
-                )} away from your location`
-              : "",
-            renderTitle: true,
-            renderHeader: false,
-            noNav: true,
-            pressHandler: () => null,
-          }}
-        />
-        <View style={style.infoWrapper}>
-          <Text style={style.title}>Nearby Buses</Text>
-
-          {buses.map((bus, index) => (
             <ListItem
               {...{
-                headerRight: bus ? `${distanceToFootTime(
-                  formatDistance(
-                    Math.abs(bus.props.distance - busStop[0]?.props?.distance)
-                  )
-                )} away` : '',
-                itemTitle: bus ? bus.props.route : '',
-                itemSubTitle: bus
-                  ? `Reaching your nearest bus stop in ${distanceToFootTime(
-                      formatDistance(
-                        Math.abs(bus.props.distance - busStop[0]?.props?.distance)
-                      )
-                    )}`
+                itemTitle: `${pointAdress ? pointAdress : "Loading.."}`,
+                itemSubTitle: busStop[0]
+                  ? `${distanceToFootTime(
+                      formatDistance(busStop[0]?.props?.distance)
+                    )} away from your location`
                   : "",
-                headerLeft: bus.props.id,
                 renderTitle: true,
-                renderHeader: true,
-                isBus: true,
+                renderHeader: false,
+                noNav: true,
                 pressHandler: () => null,
               }}
             />
-          ))}
+          </View>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={{ flexDirection: "row" }}>
+              {buses.map((bus, index) => (
+                <BusCard
+                  time={distanceToFootTime(
+                    formatDistance(
+                      Math.abs(bus.props.distance - busStop[0]?.props?.distance)
+                    )
+                  )}
+                  route={bus ? bus.props.route : ""}
+                  busNumber={bus.props.id}
+                  index={index}
+                />
+
+                // <ListItem
+                //   {...{
+                //     headerRight: bus ? `${distanceToFootTime(
+                //       formatDistance(
+                //         Math.abs(bus.props.distance - busStop[0]?.props?.distance)
+                //       )
+                //     )} away` : '',
+                //     itemTitle: bus ? bus.props.route : '',
+                //     itemSubTitle: bus
+                //       ? `Reaching your nearest bus stop in ${distanceToFootTime(
+                //           formatDistance(
+                //             Math.abs(bus.props.distance - busStop[0]?.props?.distance)
+                //           )
+                //         )}`
+                //       : "",
+                //     headerLeft: bus.props.id,
+                //     renderTitle: true,
+                //     renderHeader: true,
+                //     isBus: true,
+                //     pressHandler: () => null,
+                //   }}
+                // />
+              ))}
+            </View>
+          </ScrollView>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -81,7 +98,6 @@ const style = StyleSheet.create({
   container: {
     width: "100%",
     paddingTop: 0,
-    paddingLeft: 20,
     paddingBottom: 30,
   },
   title: {

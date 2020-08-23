@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: "center",
     borderBottomColor: '#e8e8e8',
-    paddingBottom: 15,
-    marginBottom: 10,
+    paddingBottom: 5,
+    marginBottom: 15,
     borderBottomWidth: 1,
     borderColor: whiteColor
   },

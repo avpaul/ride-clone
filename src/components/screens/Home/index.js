@@ -187,6 +187,7 @@ const Home = ({ navigation }) => {
     updateCurrentLocation();
   }, [currentLocation]);
 
+
   const onMapReady = async (mapRef) => {
     setMapView(mapRef);
 

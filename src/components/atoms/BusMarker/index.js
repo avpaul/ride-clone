@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 13,
     marginTop: 3.5,
-    marginLeft: 40,
+    marginLeft: 30,
   },
   marker:{
     position: 'absolute',
