@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import BusStop from "../../../assets/icons/bus-stop";
 import RightArrow from "../../../../assets/icons/arrow_right";
 import Bus from "../../../../assets/icons/black-bus";
-import { whiteColor } from "../../../styles/colors";
+import { whiteColor, primaryColor } from "../../../styles/colors";
 
 
 const colors = {
@@ -21,6 +21,7 @@ export default ({
   pressHandler,
   isBus,
   noNav,
+  index,
   itemBold,
   ...props
 }) => {
@@ -29,8 +30,8 @@ export default ({
     <View style={styles.container}>
       {renderHeader && (
         <View style={styles.headerWrapper}>
-          <Text style={styles.headerLeft}>{headerLeft}</Text>
-          <Text style={styles.headerRight}>{headerRight}</Text>
+          <Text style={[styles.headerLeft]}>{headerLeft}</Text>
+          <Text style={[styles.headerRight, { color: index === 0 ? primaryColor : "#111" }]}>{headerRight}</Text>
           <View />
         </View>
       )}

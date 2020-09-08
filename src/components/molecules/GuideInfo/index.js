@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import _ from "lodash";
 
 import ListItem from "../../atoms/ListItem";
 import placesService from "../../../services/places-service";
@@ -46,45 +47,70 @@ const GuideInfo = ({ navigation, busStop, buses }) => {
             />
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: "row" }}>
-              {buses.map((bus, index) => (
-                <BusCard
-                  time={distanceToFootTime(
-                    formatDistance(
-                      Math.abs(bus.props.distance - busStop[0]?.props?.distance)
+          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}> */}
+          <View
+            style={{
+              // flexDirection: "row",
+              marginLeft: 20,
+              maxWidth: "80%",
+            }}
+          >
+            {_.orderBy(
+              buses,
+              function (item) {
+                return distanceToFootTime(
+                  formatDistance(
+                    Math.abs(
+                      item.props.distance - busStop[0]?.props?.distance
                     )
-                  )}
-                  route={bus ? bus.props.route : ""}
-                  busNumber={bus.props.id}
-                  index={index}
-                />
+                  )
+                )
+              },
+              ["asc"]
+            ).map((bus, index) => (
+              // <BusCard
+              //   time={distanceToFootTime(
+              //     formatDistance(
+              //       Math.abs(bus.props.distance - busStop[0]?.props?.distance)
+              //     )
+              //   )}
+              //   route={bus ? bus.props.route : ""}
+              //   busNumber={bus.props.id}
+              //   index={index}
+              // />
 
-                // <ListItem
-                //   {...{
-                //     headerRight: bus ? `${distanceToFootTime(
-                //       formatDistance(
-                //         Math.abs(bus.props.distance - busStop[0]?.props?.distance)
-                //       )
-                //     )} away` : '',
-                //     itemTitle: bus ? bus.props.route : '',
-                //     itemSubTitle: bus
-                //       ? `Reaching your nearest bus stop in ${distanceToFootTime(
-                //           formatDistance(
-                //             Math.abs(bus.props.distance - busStop[0]?.props?.distance)
-                //           )
-                //         )}`
-                //       : "",
-                //     headerLeft: bus.props.id,
-                //     renderTitle: true,
-                //     renderHeader: true,
-                //     isBus: true,
-                //     pressHandler: () => null,
-                //   }}
-                // />
-              ))}
-            </View>
-          </ScrollView>
+              <ListItem
+                {...{
+                  headerRight: bus
+                    ? `${distanceToFootTime(
+                        formatDistance(
+                          Math.abs(
+                            bus.props.distance - busStop[0]?.props?.distance
+                          )
+                        )
+                      )} away`
+                    : "",
+                  itemTitle: bus ? bus.props.route : "",
+                  itemSubTitle: bus
+                    ? `Reaching your nearest bus stop in ${distanceToFootTime(
+                        formatDistance(
+                          Math.abs(
+                            bus.props.distance - busStop[0]?.props?.distance
+                          )
+                        )
+                      )}`
+                    : "",
+                  headerLeft: bus.props.id,
+                  renderTitle: true,
+                  renderHeader: true,
+                  isBus: true,
+                  index: index,
+                  pressHandler: () => null,
+                }}
+              />
+            ))}
+          </View>
+          {/* </ScrollView> */}
         </View>
       </ScrollView>
     </View>

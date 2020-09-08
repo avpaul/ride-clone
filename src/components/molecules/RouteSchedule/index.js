@@ -25,9 +25,9 @@ const RouteSchedule = ({ route = {} }) => {
     })
   },[route]);
 
-  const travelTime = bus.id ? distanceToFootTime(
+  const travelTime = distanceToFootTime(
     formatDistance(ABDistance(bus, route?.points[0]))
-  ).replace(" Min", "") : '-';
+  ).replace(" Min", "");
 
   const travelToStation = distanceToFootTime(
     formatDistance(ABDistance(currentLocation, route?.points[0]))

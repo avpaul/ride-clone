@@ -4,6 +4,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import { pad } from '../../../helpers';
 
 const styles = StyleSheet.create({
+  wrapper:{
+    paddingRight: 10,
+    borderRightWidth: 1,
+    borderRightColor: '#555',
+  },
   labelWrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -19,7 +24,7 @@ const styles = StyleSheet.create({
     marginBottom: -8
   },
   minutesText: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: '700'
   },
   minutesTextLabel: {
@@ -33,16 +38,16 @@ const BusArrivalAtom = ({ minutes, label }) => {
     <View style={styles.wrapper}>
       <View style={styles.labelWrapper}>
         {label ? (
-          <>
-            <Text style={styles.label}>{label}</Text>
+          <View>
+            <Text style={styles.label}>Bus {label}</Text>
             <Text style={styles.labelCaption}>&nbsp;arrives in</Text>
-          </>
+          </View>
         ) : (
           <Text style={styles.label}>In</Text>
         )}
       </View>
       <View style={styles.minutesWrapper}>
-        <Text style={styles.minutesText}>{pad(minutes)}</Text>
+        <Text style={styles.minutesText}>{pad(minutes) !== 'NaN' ? pad(minutes) : ''}</Text>
         <Text style={styles.minutesTextLabel}>&nbsp;min</Text>
       </View>
     </View>

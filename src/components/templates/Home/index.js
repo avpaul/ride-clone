@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import AlertIcon from "../../../../assets/icons/alert";
 
@@ -36,7 +36,7 @@ const style = StyleSheet.create({
   },
   toolbar: {
     flexDirection: "row",
-    marginTop: 0,
+    marginTop: Platform.OS === 'android' ? 30 : 0,
     padding: 10,
     paddingTop: 0,
   },

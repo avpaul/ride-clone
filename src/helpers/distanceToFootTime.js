@@ -5,9 +5,9 @@ export default (distance, nearByPoint) => { // 84 meters per minute
         time = Math.abs(time - nearByPoint.props.distance);
     }
 
-    // if(time > 60){
-    //     return `${Number(time / 60).toFixed(0)} H`;
-    // }
+    if(time > 60){
+        return `${Number(time / 60).toFixed(0)} H`;
+    }
 
     return `${time.toFixed(0)} Min`
 }
